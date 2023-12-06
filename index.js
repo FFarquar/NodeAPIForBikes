@@ -71,6 +71,22 @@ app.get("/bikes", async function(req, res) {
 
 });
 
+app.get("/bike/:bikeid", async function (req, res)  {
+  //get a bike using bike Id
+  
+  console.log("In app.get(/bike/:bike ");
+  console.log("   req.params.bikeid = "  + req.params.bikeid);
+
+  bikeID = req.params.bikeid;
+  console.log("bikeId variable  =  " + bikeID);
+
+  const bike = await Bike_m.find({Id:bikeID});
+
+  res.send(bike);
+
+
+});
+
 /* 
 
 app.post("/", async function(req, res){
