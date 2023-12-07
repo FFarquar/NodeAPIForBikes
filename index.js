@@ -2,17 +2,26 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 //const ejs = require("ejs");
 //const stringify = require("json-stringify");
 //const { bindAll } = require("lodash");
 
 const cors = require('cors');
+const { adminAuth, userAuth } = require("./middleware/auth.js");
 
 mongoose.set('strictQuery', false);
 const PORT = process.env.PORT || 3000;
 
 
 const app = express();
+app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
+app.get("/basic", userAuth, (req, res) => res.send("User Route"));
+
+app.use(express.json());
+
+app.use("/api/auth", require("./Auth/Route"))
+app.use( cookieParser());
 
 require('dotenv').config();
 
@@ -30,8 +39,8 @@ app.use(cors({
 //app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.json());
 
+console.log("TODO: up to creating Rego form. To be done from Blazor. https://www.loginradius.com/blog/engineering/guest-post/nodejs-authentication-guide/")
 app.use(express.static("public"));
 
 
@@ -40,17 +49,20 @@ const db = async () => {
 
 
     const dbstring = "mongodb+srv://"+ process.env.MongoDB_User + ":" + process.env.MongoDB_Password +"@" + process.env.MongoDB_Cluster +"/"+ process.env.MongoDB_DB_Name;
-    console.log(dbstring);
+
     const conn = await mongoose.connect(dbstring);
+
+
     //const conn = await mongoose.connect('mongodb+srv://DD_1:DD_1_PW@cluster1.eiy6kz9.mongodb.net/BikeDB');
+    module.exports = conn;
 
-
-    console.log("MonoDB Connected: " + conn.connection.host);
+    console.log("MonoDB Connected: " + await conn.connection.host);
       
     } catch (error) {
     console.log(error);
     process.exit(1);
   }
+  
 }
 
 
@@ -251,6 +263,7 @@ db().then(() => {
     console.log("Listening for requests");
   })
 });
+
 
 
 
