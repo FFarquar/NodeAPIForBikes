@@ -11,7 +11,17 @@ const cors = require('cors');
 mongoose.set('strictQuery', false);
 const PORT = process.env.PORT || 3000;
 
+
 const app = express();
+
+require('dotenv').config();
+
+require('./apis/trips.js')(app);
+
+require('./apis/bikes.js')(app);
+
+
+
 
 app.use(cors({
   origin: '*'
@@ -24,10 +34,15 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+
 const db = async () => {
   try {
 
-    const conn = await mongoose.connect('mongodb+srv://DD_1:DD_1_PW@cluster1.eiy6kz9.mongodb.net/BikeDB');
+
+    const dbstring = "mongodb+srv://"+ process.env.MongoDB_User + ":" + process.env.MongoDB_Password +"@" + process.env.MongoDB_Cluster +"/"+ process.env.MongoDB_DB_Name;
+    console.log(dbstring);
+    const conn = await mongoose.connect(dbstring);
+    //const conn = await mongoose.connect('mongodb+srv://DD_1:DD_1_PW@cluster1.eiy6kz9.mongodb.net/BikeDB');
 
 
     console.log("MonoDB Connected: " + conn.connection.host);
@@ -39,7 +54,7 @@ const db = async () => {
 }
 
 
-
+/* 
 const Schema = mongoose.Schema;
 
 const bikesSchema = new Schema({
@@ -59,7 +74,8 @@ const bikesSchema = new Schema({
 
 });
  */
-const Bike_m = mongoose.model("bike", bikesSchema);
+
+/* const Bike_m = mongoose.model("bike", bikesSchema);
 
 app.get("/bikes", async function(req, res) {
 //An api call to get bikes
@@ -70,8 +86,8 @@ app.get("/bikes", async function(req, res) {
   res.send(bikes);
 
 });
-
-app.get("/bike/:bikeid", async function (req, res)  {
+ */
+/* app.get("/bike/:bikeid", async function (req, res)  {
   //get a bike using bike Id
   
   console.log("In app.get(/bike/:bike ");
@@ -85,7 +101,7 @@ app.get("/bike/:bikeid", async function (req, res)  {
   res.send(bike);
 
 
-});
+}); */
 
 /* 
 
