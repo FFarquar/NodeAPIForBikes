@@ -63,6 +63,8 @@ require('./apis/trips.js')(app);
 
 require('./apis/bikes.js')(app);
 
+require('./apis/chains.js')(app);
+
 
 
 
