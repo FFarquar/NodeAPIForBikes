@@ -14,7 +14,7 @@ const jwt = require('jsonwebtoken')
         password,
       }).then(user =>
         res.status(200).json({
-          message: "User successfully created",
+            message: "User successfully created",
           user,
         })
       )
@@ -25,37 +25,70 @@ const jwt = require('jsonwebtoken')
       })
     }
   } */
+/* 
+  exports.testHeaderResponse = async (req, res, next) => {
 
-  exports.register = async (req, res, next) => {
-    const { username, password } = req.body;
+    console.log("testheader has been created")
+    res.setHeader('Access-Control-Expose-Headers', "*");
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('jwt', "Some text in here");
+
+    res.status(201).json({
+      message: "Test done"
+    });
+    res.send("cool");
+  }
+ */
   
+  exports.register = async (req, res, next) => {
+    const { username, password, email } = req.body;
+
+    
+    console.log("Register has been called");
+    console.log("   ");
+    console.log("USERNAME = " + username);
+    console.log("Email = " + email);
+    console.log("Password = " + password);
+    
+
     bcrypt.hash(password, 10).then(async (hash) => {
       await User.create({
         username,
         password: hash,
+        email
       })
         .then((user) => {
-          const maxAge = 3 * 60 * 60;
+          const maxAge = 24 * 60 * 60;
           const token = jwt.sign(
             { id: user._id, username, role: user.role },
             process.env.jwtSecret,
             {
-              expiresIn: maxAge, // 3hrs in sec
+              expiresIn: maxAge, // 24hrs in sec
             }
           );
+          console.log("Token created for " + username + " = " + token);
+//Blazor can't read cookies or headers, so have to set the token
+//in the response message and read it from that location
+
+/*           res.setHeader('Access-Control-Expose-Headers', "*");
+          res.setHeader('Access-Control-Allow-Origin', "*");
+                
+          res.setHeader('jwt', token);
+*/
           res.cookie("jwt", token, {
             httpOnly: true,
-            maxAge: maxAge * 1000, // 3hrs in ms
+            maxAge: maxAge * 1000, // 24hrs in ms
           });
           res.status(201).json({
             message: "User successfully created",
             user: user._id,
+            token: token
           });
         })
         .catch((error) =>
           res.status(400).json({
             message: "User not successful created",
-            error: error.message,
+            error: error.message
           })
         );
     });
@@ -88,13 +121,16 @@ const jwt = require('jsonwebtoken')
                 expiresIn: maxAge, // 3hrs in sec
               }
             );
-            res.cookie("jwt", token, {
+
+            //see note on register route as to why token isnt in cookie
+/*             res.cookie("jwt", token, {
               httpOnly: true,
               maxAge: maxAge * 1000, // 3hrs in ms
-            });
+            }); */
             res.status(201).json({
               message: "User successfully Logged in",
               user: user._id,
+              token: token
             });
           } else {
             res.status(400).json({ message: "Login not succesful" });
@@ -144,7 +180,7 @@ const jwt = require('jsonwebtoken')
 
 
 
-//This code taken from this site. Some is out of date esepcially callbacks. See this method for changes
+//This code taken from this site. Some is out of date esepcially callbacks. See this method for changes (had to change to try catch block)
   //https://www.loginradius.com/blog/engineering/guest-post/nodejs-authentication-guide/
   //update the role of the user
   exports.update = async (req, res, next) => {

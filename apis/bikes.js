@@ -26,7 +26,8 @@ module.exports = function(app){
         app.get('/bikes', async function(req, res){
             const filter = {};  
             const bikes = await Bike_m.find(filter);
-            
+            console.log("In /bikes");
+            console.log("bikes details =  " + bikes);
             res.send(bikes);
         });
     
@@ -35,15 +36,17 @@ module.exports = function(app){
         app.get("/bike/:bikeid", async function (req, res)  {
             //get a bike using bike Id
             
-            console.log("In app.get(/bike/:bike ");
-            console.log("   req.params.bikeid = "  + req.params.bikeid);
+            //console.log("In app.get(/bike/:bike ");
+            //console.log("   req.params.bikeid = "  + req.params.bikeid);
           
             bikeID = req.params.bikeid;
-            console.log("bikeId variable  =  " + bikeID);
+            //console.log("bikeId variable  =  " + bikeID);
           
-            const bike = await Bike_m.find({Id:bikeID});
-          
+            //const bike = await Bike_m.find({Id:bikeID});
+            const bike = await Bike_m.findOne({Id:bikeID},{_id:0});
+            //console.log("bike details =  " + bike);
             res.send(bike);
+            //res.send(JSON.stringify(bike));
           
           
           });

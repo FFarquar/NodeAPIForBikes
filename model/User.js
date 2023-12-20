@@ -15,6 +15,11 @@ const UserSchema = new Mongoose.Schema({
     default: "Basic",
     required: true,
   },
+  email: {
+    type: String,
+    default: "",
+    required: true,
+  },
 })
 
 const User = Mongoose.model("user", UserSchema)

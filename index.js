@@ -13,9 +13,39 @@ const { adminAuth, userAuth } = require("./middleware/auth.js");
 mongoose.set('strictQuery', false);
 const PORT = process.env.PORT || 3000;
 
-
 const app = express();
-app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
+/* app.use(cors({
+  origin: '*'
+})); */
+
+/* 
+app.use(cors({
+    allowedHeaders: ["authorization", "Content-Type"], // you can change the headers
+    exposedHeaders: ["authorization"], // you can change the headers
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false
+})); */
+
+/* app.use(cors({
+    origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io/TestFromGitToMongo'],
+    preflightContinue: false,
+}));
+app.use(function (request, response, next) {
+  response.setheader('Access-Control-Allow-Origin', 'https://ffarquar.github.io/TestFromGitToMongo');
+  response.setheader('Access-Control-Allow-Credentials', 'https://ffarquar.github.io/TestFromGitToMongo');
+  response.setheader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+ */
+
+var corsOptions = {
+    origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io/TestFromGitToMongo'],
+    credentials: true };
+
+app.use(cors(corsOptions));
+
+app.get("/admin", adminAuth, (req, res) => res.send("Admin Route reache with admin user"));
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 
 app.use(express.json());
@@ -32,9 +62,7 @@ require('./apis/bikes.js')(app);
 
 
 
-app.use(cors({
-  origin: '*'
-}));
+
 
 //app.set('view engine', 'ejs');
 
