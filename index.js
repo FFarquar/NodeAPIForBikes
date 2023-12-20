@@ -39,10 +39,14 @@ app.use(function (request, response, next) {
 });
  */
 
-var corsOptions = {
+/* var corsOptions = {
     origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io/TestFromGitToMongo'],
     credentials: true };
-
+ */
+  var corsOptions = {
+    origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io'],
+    credentials: true };
+  
 app.use(cors(corsOptions));
 
 app.get("/admin", adminAuth, (req, res) => res.send("Admin Route reache with admin user"));
