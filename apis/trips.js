@@ -15,40 +15,13 @@ const tripSchema = Schema({
 
   });
 
-/*   const tripSchema_DTO = Schema({
-    Id: Number,
-    ChainId: Number,
-    Date: Date,
-    TripDistance: Number,  
-    ChainRotation: Number,
-    TripDescription: String,
-    TripNotes: String,
-    ChainLetter: String
 
-  });
-
-  const chainSchema = Schema({
-    Id: Number,
-    Brand: String,
-    Model: String,
-    DatePurchased: Date,  
-    Cost: Number,
-    ChainLetter: String,
-    ImageURL: String,
-    PurchasedFrom: String,
-    CurrentRotation: Number,
-    BikeId: Number
-  });
- */
 const Trip_m = mongoose.model("trips", tripSchema);
-//const Chain_m = mongoose.model("chains", chainSchema);
-//const Trip_M_DTO = mongoose.model("chains", tripSchema_DTO);
-
 
 module.exports = function(app){
 
     //An api call to get all trips for all bikes
-        app.get('/trips', async function(req, res){
+        app.get('/api/trips/getalltrips', async function(req, res){
             console.log("In trips route");
 
             const result = await Trip_m.aggregate([
@@ -90,10 +63,9 @@ module.exports = function(app){
             });
             res.send(resultsToReturn);
         });
-
         
     //Get all trips for a bike
-    app.get('/trips/:bikeid', async function(req, res){
+    app.get('/api/trips/gettripsforbike/:bikeid', async function(req, res){
       
       bikeid = req.params.bikeid
       console.log("Bileid = " + bikeid)
@@ -155,5 +127,22 @@ module.exports = function(app){
         res.send(resultsToReturn);
       });
 
+      //Add a trip
+    app.post('/api/trips/addtrip', async function(req, res){
+      
+      const trip = new Trip_m({
+        ChainId: req.body.ChainId,
+        Date: req.body.Date,
+        TripDistance: req.body.TripDistance,  
+        ChainRotation: req.body.ChainRotation,
+        TripDescription: req.body.TripDescription,
+        TripNotes: req.body.TripNotes        
+      })
+
+      await trip.save()
+      res.send(trip)
+
+
+    });
         //other routes..
 }

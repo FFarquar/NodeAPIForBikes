@@ -14,35 +14,7 @@ mongoose.set('strictQuery', false);
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-/* app.use(cors({
-  origin: '*'
-})); */
 
-/* 
-app.use(cors({
-    allowedHeaders: ["authorization", "Content-Type"], // you can change the headers
-    exposedHeaders: ["authorization"], // you can change the headers
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false
-})); */
-
-/* app.use(cors({
-    origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io/TestFromGitToMongo'],
-    preflightContinue: false,
-}));
-app.use(function (request, response, next) {
-  response.setheader('Access-Control-Allow-Origin', 'https://ffarquar.github.io/TestFromGitToMongo');
-  response.setheader('Access-Control-Allow-Credentials', 'https://ffarquar.github.io/TestFromGitToMongo');
-  response.setheader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
- */
-
-/* var corsOptions = {
-    origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io/TestFromGitToMongo'],
-    credentials: true };
- */
   var corsOptions = {
     origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io'],
     credentials: true };
@@ -64,8 +36,6 @@ require('./apis/trips.js')(app);
 require('./apis/bikes.js')(app);
 
 require('./apis/chains.js')(app);
-
-
 
 
 

@@ -22,7 +22,7 @@ const Chain_M = mongoose.model("chains", chainSchema);
 
 module.exports = function(app){
 
-    app.get('/chains/:bikeid', async function(req, res){
+    app.get('/api/chains/:bikeid', async function(req, res){
 
         bikeID = req.params.bikeid;
 

@@ -23,7 +23,7 @@ const Bike_m = mongoose.model("bike", bikesSchema);
 module.exports = function(app){
 
     //An api call to get all bikes
-        app.get('/bikes', async function(req, res){
+        app.get('/api/bikes', async function(req, res){
             const filter = {};  
             const bikes = await Bike_m.find(filter);
             console.log("In /bikes");
@@ -33,7 +33,7 @@ module.exports = function(app){
     
         //other routes..
 
-        app.get("/bike/:bikeid", async function (req, res)  {
+        app.get("/api/bikes/bike/:bikeid", async function (req, res)  {
             //get a bike using bike Id
             
             //console.log("In app.get(/bike/:bike ");
