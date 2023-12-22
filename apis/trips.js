@@ -78,6 +78,9 @@ module.exports = function(app){
     //https://stackoverflow.com/questions/62025750/mongoose-find-and-lookup
         const result = await Trip_m.aggregate([
           {
+            $sort: { Date: 1 }
+          },          
+          {
             $lookup: {
               from: "chains",
               localField: "ChainId",
