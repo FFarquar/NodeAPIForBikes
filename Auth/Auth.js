@@ -96,7 +96,9 @@ const jwt = require('jsonwebtoken')
 
   exports.login = async (req, res, next) => {
     const { username, password } = req.body
+    console.log("In the login route");
     // Check if username and password is provided
+    //TODO : IF user has already has an  access token, it needs to be blacklisted
     if (!username || !password) {
       return res.status(400).json({
         message: "Username or Password not present",

@@ -26,6 +26,9 @@ module.exports = function(app){
 
             const result = await Trip_m.aggregate([
               {
+                $sort: { Date: 1 }
+              },
+              {
                 $lookup: {
                   from: "chains",
                   localField: "ChainId",

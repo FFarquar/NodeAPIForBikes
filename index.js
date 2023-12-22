@@ -21,8 +21,8 @@ const app = express();
   
 app.use(cors(corsOptions));
 
-app.get("/admin", adminAuth, (req, res) => res.send("Admin Route reache with admin user"));
-app.get("/basic", userAuth, (req, res) => res.send("User Route"));
+app.get("/api/admin", adminAuth, (req, res) => res.send("Admin Route reache with admin user"));
+app.get("/api/basic", userAuth, (req, res) => res.send("User Route"));
 
 app.use(express.json());
 

@@ -5,11 +5,12 @@ exports.adminAuth = (req, res, next) => {
   //const token = req.cookies.jwt
  
   //const {token} = req.query;
+  console.log("In adminauth");
   console.log(JSON.stringify(req.headers));
   var tokenraw = req.headers['authorization'];
   var token = tokenraw.replace("Bearer ","");
 
-  console.log("In adminauth");
+  
   console.log("Token = " + token);
   
   
