@@ -247,11 +247,15 @@ module.exports = function(app){
         console.debug("doc is null");
         res.send(doc);
       }        
+      else
+      {
+        doc.Date = new Date(doc.Date);
+        // date is a Date object you got, e.g. from MongoDB
+  
+        res.send(doc);
+  
+      }
 
-      doc.Date = new Date(doc.Date);
-      // date is a Date object you got, e.g. from MongoDB
-
-      res.send(doc);
     });
 
     //other routes..

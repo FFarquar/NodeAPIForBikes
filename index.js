@@ -31,12 +31,14 @@ app.use( cookieParser());
 
 require('dotenv').config();
 
+
+
 require('./apis/trips.js')(app);
 
 require('./apis/bikes.js')(app);
 
 require('./apis/chains.js')(app);
-
+require('./apis/notes.js')(app);
 
 
 
