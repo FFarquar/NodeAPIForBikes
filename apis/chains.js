@@ -66,4 +66,12 @@ module.exports = function(app){
         //res.send(result);
     });
 
+    app.get('/api/chains/getchain/:chainid', async function(req, res){
+
+      chainId = req.params.chainid;
+
+      const chain = await Chain_M.findOne({Id:chainId});
+      res.send(chain);      
+
+  });
 };

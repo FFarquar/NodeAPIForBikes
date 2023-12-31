@@ -255,8 +255,98 @@ module.exports = function(app){
         res.send(doc);
   
       }
-
     });
 
+    //ReturnListOfChainRotationsForChain
+    app.get('/api/trips/listofChainRotForChain/:chainid', async function(req, res){
+      
+      //const filter = {ChainId: req.params.chaind};
+      console.log("Chain Id of chain = " + req.params.chainid);
+
+      const result = await Trip_m_Read.aggregate([
+        {
+          $match: { ChainId: parseInt(req.params.chainid)}
+        },
+        {
+          $group: {
+            _id: "$ChainRotation",
+            trips: {
+              $push: "$$ROOT"
+            }
+          }
+        }
+      ]);
+
+      //TODO: if trip not fiound, this is causing an error
+      if(result == null)
+      {
+        console.debug("result is null");
+        res.send(result);
+      }        
+      else
+      {
+        res.send(result);
+      }
+    });
+
+        //ReturnList of trips for a chain on a specific rotation
+        app.get('/api/trips/listofTripsForChainRotation/:chainid/:rotation', async function(req, res){
+      
+          //query is to return a TripDTO object, comprising the following values
+          //t = trip, c = ChainLetter
+/*        t.Id,
+          c.ChainLetter,
+          t.ChainId,
+          t.Date,
+          t.TripDistance,
+          t.ChainRotation,
+          t.TripDescription,
+          t.TripNotes */
+
+          //const filter = {ChainId: req.params.chaind};
+          console.log("Chain Id  = " + req.params.chainid);
+          console.log("Rotation  = " + req.params.rotation);
+
+          const result = await Trip_m_Read.aggregate([
+            {$match: {"$and":[{ ChainId: parseInt(req.params.chainid)},
+                     {ChainRotation: parseInt(req.params.rotation)}] }
+            },
+            {
+              $sort: { Date: 1 }
+            },
+            {
+              $lookup: {
+                from: "chains",
+                localField: "ChainId",
+                foreignField: "Id",
+                as: "ChainDetails"
+              }
+            },
+            {
+              $project: {"BikeId": 0, "PurchasedFrom": 0}
+            }
+          ]);
+          //Cant work out how to exclude fields from the chain object. Have to remove them below (the project pipeline is not working)
+
+          var resultsToReturn = [];
+          result.forEach(element => {
+            if(element.ChainDetails.length != 0)
+            {
+              
+              const obj = {"Id": element.Id, "ChainId":element.ChainId, "ChainLetter": element.ChainDetails[0].ChainLetter,
+              "ChainRotation" : element.ChainRotation, "Date" : new Date(element.Date),
+              "TripDescription" : element.TripDescription,"TripDistance" : element.TripDistance, "TripNotes" : element.TripNotes,
+              "_id" : element._id};
+      
+              resultsToReturn.push(obj)
+            }
+            
+          });          
+
+          //resultsToReturn.sort((a, b) => a.Date > b.Date);
+          resultsToReturn.sort(compAsc);
+          
+          res.send(resultsToReturn);
+        });
     //other routes..
 }
