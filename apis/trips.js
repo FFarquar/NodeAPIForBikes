@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const app = express();
+const { adminAuth, userAuth} = require("../middleware/auth.js");
 //const moment = require('moment');
 
 //Mongo is a pain in the arse in that it makes saving things like birthdates difficult as it adds in timezones.
@@ -36,59 +37,59 @@ const tripSchema = Schema({
 module.exports = function(app){
 
     //An api call to get all trips for all bikes
-        app.get('/api/trips/getalltrips', async function(req, res){
-            console.log("In trips route");
+    app.get('/api/trips/getalltrips', userAuth, async function(req, res){
+        console.log("In trips route");
 
-            const result = await Trip_m_Read.aggregate([
-              {
-                $sort: { Date: 1 }
-              },
-              {
-                $lookup: {
-                  from: "chains",
-                  localField: "ChainId",
-                  foreignField: "Id",
-                  as: "ChainDetails"
-                }
-              },
-              {
-                $project: {
-                  "_id": 1,
-                  "Id": 1,
-                  "ChainId": 1,
-                  "Date": 1,
-                  "TripDistance": 1,
-                  "ChainRotation": 1,
-                  "TripDescription": 1,
-                  "TripNotes": 1,
-                  "ChainDetails": 1
-                }
-              }
-            ]);
+        const result = await Trip_m_Read.aggregate([
+          {
+            $sort: { Date: 1 }
+          },
+          {
+            $lookup: {
+              from: "chains",
+              localField: "ChainId",
+              foreignField: "Id",
+              as: "ChainDetails"
+            }
+          },
+          {
+            $project: {
+              "_id": 1,
+              "Id": 1,
+              "ChainId": 1,
+              "Date": 1,
+              "TripDistance": 1,
+              "ChainRotation": 1,
+              "TripDescription": 1,
+              "TripNotes": 1,
+              "ChainDetails": 1
+            }
+          }
+        ]);
 
-            var resultsToReturn = [];
-            result.forEach(element => {
-              if(element.ChainDetails.length != 0)
-              {
-                
-                const obj = {"Id": element.Id, "ChainId":element.ChainId, "ChainLetter": element.ChainDetails[0].ChainLetter,
-                "ChainRotation" : element.ChainRotation, "Date" : new Date(element.Date),
-                "TripDescription" : element.TripDescription,"TripDistance" : element.TripDistance, "TripNotes" : element.TripNotes,
-                "_id" : element._id};
-        
-                resultsToReturn.push(obj)
-              }
-              
-            });
+        var resultsToReturn = [];
+        result.forEach(element => {
+          if(element.ChainDetails.length != 0)
+          {
             
-            resultsToReturn.sort(compAsc);
+            const obj = {"Id": element.Id, "ChainId":element.ChainId, "ChainLetter": element.ChainDetails[0].ChainLetter,
+            "ChainRotation" : element.ChainRotation, "Date" : new Date(element.Date),
+            "TripDescription" : element.TripDescription,"TripDistance" : element.TripDistance, "TripNotes" : element.TripNotes,
+            "_id" : element._id};
+    
+            resultsToReturn.push(obj)
+          }
+          
+        });
+        
+        resultsToReturn.sort(compAsc);
 
-            res.send(resultsToReturn);
-          });
+        res.send(resultsToReturn);
+      });
            
         
     //Get all trips for a bike
-    app.get('/api/trips/gettripsforbike/:bikeid', async function(req, res){
+    app.get('/api/trips/gettripsforbike/:bikeid', userAuth, async function(req, res){
       
       bikeid = req.params.bikeid
       console.log("Bileid = " + bikeid)
@@ -158,7 +159,6 @@ module.exports = function(app){
         res.send(resultsToReturn);
       });
 
-
     function compAsc(a, b) {
         return new Date(b.Date).getTime() - new Date(a.Date).getTime();
     }
@@ -168,7 +168,7 @@ module.exports = function(app){
         return new Date(a.Date).getTime() - new Date(b.Date).getTime();
     }
       //Add a trip
-    app.post('/api/trips/addtrip', async function(req, res){
+    app.post('/api/trips/addtrip', adminAuth, async function(req, res){
       //console.log("date received from API = " + req.body.Date)
       const trip = new Trip_m({
         ChainId: req.body.ChainId,
@@ -187,7 +187,7 @@ module.exports = function(app){
     });
 
     //Updated a trip
-    app.patch('/api/trips/updatetrip', async function(req, res){
+    app.patch('/api/trips/updatetrip', adminAuth, async function(req, res){
 
 
         const filter = {_id: req.body._id};
@@ -203,7 +203,7 @@ module.exports = function(app){
       });
 
     //delete a trip
-    app.delete('/api/trips/deletetrip/:tripid', async function(req, res){
+    app.delete('/api/trips/deletetrip/:tripid',adminAuth, async function(req, res){
 
       const filter = {_id: req.params.tripid};
       console.log("ID to delete = " + req.params.tripid);
@@ -235,7 +235,7 @@ module.exports = function(app){
     });
 
     //get a trip
-    app.get('/api/trips/getatrip/:tripid', async function(req, res){
+    app.get('/api/trips/getatrip/:tripid', userAuth, async function(req, res){
       
       const filter = {_id: req.params.tripid};
       //console.log("ID of trip to get = " + req.params.tripid);
@@ -258,7 +258,7 @@ module.exports = function(app){
     });
 
     //ReturnListOfChainRotationsForChain
-    app.get('/api/trips/listofChainRotForChain/:chainid', async function(req, res){
+    app.get('/api/trips/listofChainRotForChain/:chainid', userAuth, async function(req, res){
       
       //const filter = {ChainId: req.params.chaind};
       console.log("Chain Id of chain = " + req.params.chainid);
@@ -289,64 +289,64 @@ module.exports = function(app){
       }
     });
 
-        //ReturnList of trips for a chain on a specific rotation
-        app.get('/api/trips/listofTripsForChainRotation/:chainid/:rotation', async function(req, res){
-      
-          //query is to return a TripDTO object, comprising the following values
-          //t = trip, c = ChainLetter
+    //ReturnList of trips for a chain on a specific rotation
+    app.get('/api/trips/listofTripsForChainRotation/:chainid/:rotation', userAuth, async function(req, res){
+  
+      //query is to return a TripDTO object, comprising the following values
+      //t = trip, c = ChainLetter
 /*        t.Id,
-          c.ChainLetter,
-          t.ChainId,
-          t.Date,
-          t.TripDistance,
-          t.ChainRotation,
-          t.TripDescription,
-          t.TripNotes */
+      c.ChainLetter,
+      t.ChainId,
+      t.Date,
+      t.TripDistance,
+      t.ChainRotation,
+      t.TripDescription,
+      t.TripNotes */
 
-          //const filter = {ChainId: req.params.chaind};
-          console.log("Chain Id  = " + req.params.chainid);
-          console.log("Rotation  = " + req.params.rotation);
+      //const filter = {ChainId: req.params.chaind};
+      console.log("Chain Id  = " + req.params.chainid);
+      console.log("Rotation  = " + req.params.rotation);
 
-          const result = await Trip_m_Read.aggregate([
-            {$match: {"$and":[{ ChainId: parseInt(req.params.chainid)},
-                     {ChainRotation: parseInt(req.params.rotation)}] }
-            },
-            {
-              $sort: { Date: 1 }
-            },
-            {
-              $lookup: {
-                from: "chains",
-                localField: "ChainId",
-                foreignField: "Id",
-                as: "ChainDetails"
-              }
-            },
-            {
-              $project: {"BikeId": 0, "PurchasedFrom": 0}
-            }
-          ]);
-          //Cant work out how to exclude fields from the chain object. Have to remove them below (the project pipeline is not working)
+      const result = await Trip_m_Read.aggregate([
+        {$match: {"$and":[{ ChainId: parseInt(req.params.chainid)},
+                  {ChainRotation: parseInt(req.params.rotation)}] }
+        },
+        {
+          $sort: { Date: 1 }
+        },
+        {
+          $lookup: {
+            from: "chains",
+            localField: "ChainId",
+            foreignField: "Id",
+            as: "ChainDetails"
+          }
+        },
+        {
+          $project: {"BikeId": 0, "PurchasedFrom": 0}
+        }
+      ]);
+      //Cant work out how to exclude fields from the chain object. Have to remove them below (the project pipeline is not working)
 
-          var resultsToReturn = [];
-          result.forEach(element => {
-            if(element.ChainDetails.length != 0)
-            {
-              
-              const obj = {"Id": element.Id, "ChainId":element.ChainId, "ChainLetter": element.ChainDetails[0].ChainLetter,
-              "ChainRotation" : element.ChainRotation, "Date" : new Date(element.Date),
-              "TripDescription" : element.TripDescription,"TripDistance" : element.TripDistance, "TripNotes" : element.TripNotes,
-              "_id" : element._id};
-      
-              resultsToReturn.push(obj)
-            }
-            
-          });          
-
-          //resultsToReturn.sort((a, b) => a.Date > b.Date);
-          resultsToReturn.sort(compAsc);
+      var resultsToReturn = [];
+      result.forEach(element => {
+        if(element.ChainDetails.length != 0)
+        {
           
-          res.send(resultsToReturn);
-        });
+          const obj = {"Id": element.Id, "ChainId":element.ChainId, "ChainLetter": element.ChainDetails[0].ChainLetter,
+          "ChainRotation" : element.ChainRotation, "Date" : new Date(element.Date),
+          "TripDescription" : element.TripDescription,"TripDistance" : element.TripDistance, "TripNotes" : element.TripNotes,
+          "_id" : element._id};
+  
+          resultsToReturn.push(obj)
+        }
+        
+      });          
+
+      //resultsToReturn.sort((a, b) => a.Date > b.Date);
+      resultsToReturn.sort(compAsc);
+      
+      res.send(resultsToReturn);
+    });
     //other routes..
 }

@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const app = express();
+const { adminAuth, userAuth} = require("../middleware/auth.js");
 
 //Mongo is a pain in the arse in that it makes saving things like birthdates difficult as it adds in timezones.
 //A lot of sites said to save the date as a string, but that made reading and sorting difficult. This led
@@ -26,12 +27,11 @@ const noteWriteSchema = Schema({
   module.exports = function(app){
 
         
-    //Get all notes for a bike
+/*     //Get all notes for a bike (NO AUTH)
     app.get('/api/notes/getnotesforabike/:bikeid', async function(req, res){
       
       bikeid = req.params.bikeid
       console.log("bikeid = " + bikeid)
-
     
     //This site had the answer on how to use the find in Mongoose
     //https://stackoverflow.com/questions/62025750/mongoose-find-and-lookup
@@ -50,15 +50,40 @@ const noteWriteSchema = Schema({
             //console.log(element.Date)
             resultsToReturn.push(obj)            
         });  
-        //resultsToReturn.sort((a, b) => a.Date > b.Date);
+        resultsToReturn.sort(compAsc);
+        
+        res.send(resultsToReturn);
+      }); */
 
+    //Get all notes for a bike (USING AUTH)
+    app.get('/api/notes/getnotesforabike/:bikeid', userAuth, async function(req, res){
+      
+      bikeid = req.params.bikeid
+        
+    //This site had the answer on how to use the find in Mongoose
+    //https://stackoverflow.com/questions/62025750/mongoose-find-and-lookup
+        const filter = {BikeId: bikeid};  
+        const result = await Note_m_Read.find(filter);
+
+        //The results that come from MongoDB are not in a format (there is a trip object with a chain object as a property) I want to return. 
+        //I only want the ChainLetterout of the chain object, so I just get that.
+        //console.log(result)
+        var resultsToReturn = [];
+
+        result.forEach(element => {
+            const obj = {"Id": element.Id, "BikeId":element.BikeId, "Date" : new Date(element.Date),
+            "Note" : element.Note, "_id" : element._id};
+            
+            //console.log(element.Date)
+            resultsToReturn.push(obj)            
+        });  
         resultsToReturn.sort(compAsc);
         
         res.send(resultsToReturn);
       });
 
-      //Add a note
-      app.post('/api/notes/addnote', async function(req, res){
+      //Add a note (auth)
+      app.post('/api/notes/addnote', adminAuth, async function(req, res){
         //console.log("date received from API = " + req.body.Date)
         const note = new Note_m_Write({
           Note: req.body.Note,
@@ -83,10 +108,10 @@ const noteWriteSchema = Schema({
     }
 
     //get a note
-    app.get('/api/notes/getanote/:noteid', async function(req, res){
+    app.get('/api/notes/getanote/:noteid', userAuth, async function(req, res){
       
         const filter = {_id: req.params.noteid};
-        console.log("ID of note to delete = " + req.params.noteid);
+        console.log("ID of note to get = " + req.params.noteid);
   
         let doc = await Note_m_Read.findOne(filter);
 
@@ -101,46 +126,44 @@ const noteWriteSchema = Schema({
             doc.Date = new Date(doc.Date);
             res.send(doc);
         }
-
-        // date is a Date object you got, e.g. from MongoDB
   
         
       });
 
-    //delete a note
-    app.delete('/api/notes/deletenote/:noteid', async function(req, res){
 
-        const filter = {_id: req.params.noteid};
-        console.log("ID to delete = " + req.params.noteid);
-        //console.log("Update data = " + update.Stringify());
-        let testFind = await Note_m_Read.findOne(filter);
-        if (testFind == null) {
-            res.status(400).json({
-            message: "Item not found. Delete not done",
-            deleted: "false",
-            });
-        }
-    
-        let doc = await Note_m_Read.deleteOne(filter);
-        doc = await Note_m_Read.findOne(filter);
-        console.log("Result of delete = " + doc);
-        if (doc == null) {
-            res.status(200).json({
-            message: "Deleted",
-            deleted: "true",
-            });
-        }else
-        {
-            res.status(400).json({
-            message: "Not deleted",
-            deleted: "false",
-            })
-        }
-        
-    });
+    //Test delete usign verification. Only an admin can delete stuff
+    app.delete('/api/notes/deletenote/:noteid', adminAuth, async function(req, res){
+      // Accessible only by users with a valid JWT token
+      const filter = {_id: req.params.noteid};
+      console.log("ID to delete = " + req.params.noteid);
+      //console.log("Update data = " + update.Stringify());
+      let testFind = await Note_m_Read.findOne(filter);
+      if (testFind == null) {
+          return res.status(400).json({
+          message: "Item not found. Delete not done",
+          deleted: "false",
+          });
+      }
+  
+      let doc = await Note_m_Read.deleteOne(filter);
+      doc = await Note_m_Read.findOne(filter);
+      console.log("Result of delete = " + doc);
+      if (doc == null) {
+          return res.status(200).json({
+          message: "Deleted",
+          deleted: "true",
+          });
+      }else
+      {
+          return res.status(400).json({
+          message: "Not deleted",
+          deleted: "false",
+          })
+      }
+     });
 
     //Update a note
-    app.patch('/api/notes/updatenote', async function(req, res){
+    app.patch('/api/notes/updatenote', adminAuth, async function(req, res){
 
 
         const filter = {_id: req.body._id};
