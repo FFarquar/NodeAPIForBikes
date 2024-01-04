@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const app = express();
-
+const { adminAuth, userAuth} = require("../middleware/auth.js");
 
 const bikesSchema = new Schema({
   Id: Number,
@@ -23,7 +23,7 @@ const Bike_m = mongoose.model("bike", bikesSchema);
 module.exports = function(app){
 
     //An api call to get all bikes
-        app.get('/api/bikes', async function(req, res){
+        app.get('/api/bikes',userAuth, async function(req, res){
             const filter = {};  
             const bikes = await Bike_m.find(filter);
             console.log("In /bikes");

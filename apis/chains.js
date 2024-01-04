@@ -31,6 +31,9 @@ module.exports = function(app){
                 $match: {BikeId: parseInt(bikeID)},
             },
             {
+              $sort: { ChainLetter: 1 }
+            },               
+            {
               $lookup: {
                 from: "trips",
                 localField: "Id",
