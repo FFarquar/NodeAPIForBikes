@@ -7,7 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test_m": "nodemon test.js"
+    "test_m": "nodemon test.js",
+    "test_upload": "nodemon uploadtest.js",
+    "test_upload2": "nodemon uploadtest2.js",
+    "test_upload3": "nodemon uploadtest3.js",
+    "test_upload4": "nodemon uploadtest4.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,8 +24,10 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "method-override": "^3.0.0",
     "moment": "^2.29.4",
     "mongoose": "^8.0.2",
+    "multer": "^1.4.4",
     "nodemon": "^3.0.2"
   }
 }
