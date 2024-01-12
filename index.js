@@ -39,6 +39,7 @@ require('./apis/bikes.js')(app);
 
 require('./apis/chains.js')(app);
 require('./apis/notes.js')(app);
+require('./apis/testupload.js')(app);
 
 
 
