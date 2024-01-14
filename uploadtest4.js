@@ -2,7 +2,7 @@
 //need to test if this works in the prod enviornment first
 
 const express = require("express");
-const bodyParser = require("body-parser");
+//const bodyParser = require("body-parser");
 const app = express()
 
 var multer = require('multer');

@@ -2,21 +2,30 @@
 //It works in dev, no need to test it in prod. Fingers crossed
 const express = require("express");
 const bodyParser = require("body-parser");
+
 const app = express()
 const path = require("path");
+const BUCKET = process.env.BUCKET
+
+
 var multer = require('multer');
 
-const fs = require('@cyclic.sh/s3fs/promises')("cyclic-graceful-deer-fedora-ap-southeast-2")
+const fs = require('@cyclic.sh/s3fs/promises')(BUCKET)
 
 
-
-const storage = multer.diskStorage({
+const storage = multer.diskStorage(
+    {
+  
     destination: (req, file, cb) => cb(null, "uploads"), // cb -> callback
-    filename: (req, file, cb) => {
+    
+    filename: async (req, file, cb) => {
       const uniqueName = `${Date.now()}-${Math.round(
         Math.random() * 1e9
       )}${path.extname(file.originalname)}`;
+
       cb(null, uniqueName);
+
+      console.log(req.body._id) //this is how to read the other values submitted in the multi part
     },
   });
   
@@ -27,15 +36,20 @@ const storage = multer.diskStorage({
     limits: { fileSize: 1000000 * 5 },
   }).single("file");
 
+  //var urlencodedParser = bodyParser.urlencoded({ extended: false })
+  //var jsonParser = bodyParser.json()
+
   module.exports = function(app){
     //app.post('/api/images/upload', upload.single('file'), (req, res) => {
-    app.post('/api/images/upload', (req, res) => {
+    app.post('/api/images/upload', async (req, res) => {
 /*         const params = {
           Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
           Key: req.file.originalname,
           Body: req.file.buffer,
         }; */
 
+
+        
         handleMultipartData(req, res, async (err) => {
             if (err) {
               res.json({ msgs: err.message });
