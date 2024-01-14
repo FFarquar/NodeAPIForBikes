@@ -1,3 +1,5 @@
+//this example uses the @cyclic.sh/s3fs to treat the AWS S3 service as the file system
+//It works in dev, no need to test it in prod. Fingers crossed
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express()
