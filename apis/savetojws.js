@@ -1,6 +1,9 @@
 //This is an attempt to save files to AWS. This ability is provided by cyclic. Perhaps the data could be stored in that locale too
 //Using this example https://abbaslanbay.medium.com/uploading-files-to-aws-s3-with-multer-and-the-node-js-aws-sdk-7cad8dc87fc2
 
+//REMOVE THIS FILE. IT DOESNT WORK LOCALLY
+
+//This works in prod but not in dev. In dev, I get a message about the accesskeyid not being recognized.
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express()
