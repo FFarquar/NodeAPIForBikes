@@ -1,5 +1,14 @@
+//THIS DOESNT WORK IN PROD. REPLACED WITH SAVETOJWS.JS
 //This is a different method to save the file. This just writes the file to the server
 //need to test if this works in the prod enviornment first
+
+//TODO THIS DOESNT WORK IN PROD. No direct access to the file system on the server
+//Need to write the file to an S3 bucket. See this page for an example
+//https://app.cyclic.sh/#/app/ffarquar-nodeapiforbikes/data
+
+
+//check this package out that may make using s3 easier
+//https://github.com/cyclic-software/s3fs
 
 const express = require("express");
 const bodyParser = require("body-parser");
