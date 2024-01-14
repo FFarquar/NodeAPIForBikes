@@ -1,5 +1,8 @@
 //this example uses the @cyclic.sh/s3fs to treat the AWS S3 service as the file system
-//It works in dev, no need to test it in prod. Fingers crossed
+//It works in dev, now need to test it in prod. Fingers crossed
+
+//Not working in prod. ENOENT: no such file or directory, open 'uploads/1705205163686-586849938.jpg'"
+
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -16,7 +19,8 @@ const fs = require('@cyclic.sh/s3fs/promises')(BUCKET)
 const storage = multer.diskStorage(
     {
   
-    destination: (req, file, cb) => cb(null, "uploads"), // cb -> callback
+    destination: (req, file, cb) => cb(null, ""), // cb -> callback
+
     
     filename: async (req, file, cb) => {
       const uniqueName = `${Date.now()}-${Math.round(
