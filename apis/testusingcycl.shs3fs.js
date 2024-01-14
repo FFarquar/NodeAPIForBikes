@@ -19,7 +19,8 @@ const fs = require('@cyclic.sh/s3fs/promises')(BUCKET)
 const storage = multer.diskStorage(
     {
   
-    destination: (req, file, cb) => cb(null, ""), // cb -> callback
+    destination: (req, file, cb) => cb(null, "s3fs"), // cb -> callback    //this works locally, but not in prod
+    //destination: (req, file, cb) => cb(null, ""), // cb -> callback
 
     
     filename: async (req, file, cb) => {
