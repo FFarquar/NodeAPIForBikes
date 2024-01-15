@@ -16,7 +16,7 @@ var multer = require('multer');
 const fs = require('@cyclic.sh/s3fs/promises')(BUCKET)
 
 
-const storage = multer.diskStorage(
+/* const storage = multer.diskStorage(
     {
   
     destination: (req, file, cb) => cb(null, "s3fs"), // cb -> callback    //this works locally, but not in prod
@@ -36,26 +36,43 @@ const storage = multer.diskStorage(
   
   const upload = multer({ storage: storage });
 
-  const handleMultipartData = multer({
+    const handleMultipartData = multer({
     storage,
     limits: { fileSize: 1000000 * 5 },
   }).single("file");
+ */
+
+  const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // limit file size to 5MB
+    },
+  });
+
 
   //var urlencodedParser = bodyParser.urlencoded({ extended: false })
   //var jsonParser = bodyParser.json()
 
   module.exports = function(app){
-    //app.post('/api/images/upload', upload.single('file'), (req, res) => {
-    app.post('/api/images/upload', async (req, res) => {
+    app.post('/api/images/upload', upload.single('file'), (req, res) => {
+    //app.post('/api/images/upload', async (req, res) => {
 /*         const params = {
           Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
           Key: req.file.originalname,
           Body: req.file.buffer,
         }; */
 
+        fs.upload()
+    fs.upload(params, (err, data) => {
+        if (err) {
+        console.error(err);
+        return res.status(500).send('Error uploading file');
+        }
 
-        
-        handleMultipartData(req, res, async (err) => {
+        res.send('File uploaded successfully');
+    });
+
+        /* handleMultipartData(req, res, async (err) => {
             if (err) {
               res.json({ msgs: err.message });
             }
@@ -64,7 +81,7 @@ const storage = multer.diskStorage(
               file: req.file,
             });
           });
-
+ */
         /* fs.writefile(params, (err, data) => {
           if (err) {
             console.error(err);
