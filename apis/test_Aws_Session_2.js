@@ -8,12 +8,12 @@ const AWS = require('aws-sdk');
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-AWS.config.update({
+/* AWS.config.update({
   accessKeyId: 'ASIAZI4YHMLRWNTN36IM',
   secretAccessKey: 'CB9Sb0urWorgCPbLlGlD/m6oBK04vFJ58pP/1+5X',
   region: 'ap-southeast-2',
   sessionToken: 'IQoJb3JpZ2luX2VjEPH//////////wEaCmFwLXNvdXRoLTEiRjBEAiA2CR+4v48OUoPaY5mDQ4RvbalW//5mZbQX/feZcKxOOQIgF5wzdHF1nKDSbhegXjSZ7zEktnMesef0zwcmvIH4CrwqtwIImv//////////ARAAGgw2Mzc1ODUwMjM3MTUiDLlG8ZNtSBuvwB6pMyqLAusJytwph58IxXSNVZ3+MBlvTKhVcMZCgOU4KQDU0OfubQBz1ro85eHnPEwTkC12CpNpmmJ8FiJ3kJOI2JF0baDnokrBRy8+dDkU9EWrHDdoXr6gsvmK1UEQ6qgqsyNtsZNI+h5U7c1QodjYyaSQkj5DdcQlE9To9z/DXm2yRsiBJEPzrecPmXslO6bYp1+B7jFB7rsCnU6iBnSjIyIKM6HTqguu2a88zx2gsEvUGPiM/2KHYXSbxMM+rMPJ9RAl4gb5uDlvt9OcShA2/k5bGWg2El47FeE2JjeboVCFhimzfqSROPMishslShvRtgKe2FpB3QF13hmjhUioPflPbct/iBDAhrFfDDNK3DD6r5etBjqeAafCuO3sX+5ifHW76Mut0Zn3qzHnu2lvG/NcxnyhU0jd6EE/LFcJ/FbSP11x5X7RsS5KmPC5JqLF5p6Bxohi6upI13JBJ4ErgZC77NcgnU0swPcyxc7mJG8wxPrjXjOkNJcuGITeZylP7Rz/YebPm8rJOwt3bYDbDF6i0T7QFPAX/ldA8YeoW0SK8aYrWJXG9z9E3p7SaZkHrfMCH8n6'
-});
+}); */
 
 const s3 = new AWS.S3();
 
