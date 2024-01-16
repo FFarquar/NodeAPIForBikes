@@ -6,7 +6,8 @@ const app = express()
 
 const AWS = require('aws-sdk');
 
-//The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything
+//The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
+//It seems this has to be removed prior to going to prod.
 AWS.config.update({
   accessKeyId: 'ASIAZI4YHMLRWNTN36IM',
   secretAccessKey: 'CB9Sb0urWorgCPbLlGlD/m6oBK04vFJ58pP/1+5X',
