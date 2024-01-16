@@ -15,10 +15,10 @@ const AWS = require('aws-sdk');
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything
 AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLRZPFLM2TN',
-  secretAccessKey: '7LjPvWLioTzcU2qr+n0L8Vi88Kux5d3BLKZtyTrU',
+  accessKeyId: 'ASIAZI4YHMLRXLUCNNUD',
+  secretAccessKey: 'APOUqvv0MboNpTgxLgNbxZRaKWxYRWs0hHUH2ZHs',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEN///////////wEaCmFwLXNvdXRoLTEiRzBFAiAD0Vd2QjAFrFlcqKTz8TF9MNXgp0CxTQcIGzfD8iWkLQIhAJl7lvRQdHnDF+uDCOKzaKeNLxXVRkMDbUNnOsSq9vl/KrcCCIj//////////wEQABoMNjM3NTg1MDIzNzE1IgyGlW/l+Esig3gDIJ0qiwK9DoC/ZzGaTHehsWNUUSsdAAZRhoCcccnRbfPMhzGIBjiFcP0SXfuZUcVLeH/28Q4M0JiXhtZ84kW/o5S8yIkh5qgdoyCB/hYX2B75aW6YkSRdtXLiOFNBbNyCVeMJqYUnIEVKY8Zdm5W1236DG/X0VYKrCxBn5Pk2zFrUPxED9hENluTqsPkoh5r0bsoz+PQ13YxVu4pH1D3i8eEvMDutaVS02koDjmH0uRhXRUpJdUYcInJ00lPaPaDU3roDUrzg8OnRiM1+m/iOTUDSVnwa4VDhcKe0RFdzJORgK2qtS3pTDS31iEsToNZEEKi4GangeB/gFk1MtRL77zRtuu9Zmu0LRC57HAibtdAw7aOTrQY6nQGrR1Vu7kl3LgsRB9MxzZJldF2/+ymQW1N40GadJ4ve7PLZaDYs26ZIdp9sUdGyB3hEXcyY0qAYfRtCS/WNwdbMewDGV8obGgevfpTZGpBdbl6y5Pl6K1hbWJoql7Sjazo2zWKCL+q25PCb1XQlcGQUqJGHF0+l+gJFPG5sJgAioz3Z1Jpr+trhQJRouFWFUwowF9W1P1O+k2phROIO'
+  sessionToken: 'IQoJb3JpZ2luX2VjEPD//////////wEaCmFwLXNvdXRoLTEiRzBFAiEAhe5TZA4T/PAk8MSKdzvuNNHwLEVWde7syRDfPzgSA2oCIBP2r25fQwKx2XT6m7zmFhKxVoZqKIRPa7IQtZxEhrt/KrcCCJn//////////wEQABoMNjM3NTg1MDIzNzE1Igyu/3lVXMjyupeluIQqiwLHx0dgRs1FPw/jFlhf2VYlF9O8xjKDkM6cIBsvC7jCxrPuph4ALMEHgT45VsgltF8mJY81EgzHGru5dquV5t+GBE14eODt8KEzJI7vJX0L/QPyrQqbIJ3QeqbBku8oBUUkHhOX/6M48pknyspehhKiA8yCWnQYW4F+mWtVo/dNCawB0e1Nth0sTHvvQ8i0/eAIurQ84z8/HuPC5MQ7M6yvkgduYWXhli/sNqEm1H6oidgPXab4zebsG+UTn5+KEmmmMFM2SaCcVYgEZ7df02R73mRR1BSDReHFF2M1xkccfYDWP0YcgDqGYrhmljWR/sOkwTzWTPxdqTzXFUtdFYlsytprOuid5A38ltkwsJOXrQY6nQEsW0Y28kj0O/y45XqY2mbCRzSWpHJRZEYdeUtmlR4vWBtcKoBnW2uFKuGa1w5OBuSl6f4wsJKUl+F484ygv3nF1NQb+5FoaJoIh8lKaSR1Cbko9aPIZiLOKucsKKGD9rBiBv0LPSx7N8fhslRdXYgHBqjqblTJCSx/f7Vjhe7EicIxFS9H/XIme+l7jSAQnlwsV5OxmJoK2/QgCY+O'
 });
 
 const s3 = new AWS.S3();
@@ -69,15 +69,19 @@ module.exports = function(app){
 
   });
 
-  app.get('/api/images/getlist', async (req, res) => {
+
+
+  app.get('/api/images/getlisteverything', async (req, res) => {
     console.log("In get")        
     console.log("")   
     console.log("")   
-    const params = {
+     const params = {
       Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
       Prefix: '2'   //The prefix doesent work when going down another level, like 2~3 even with delimter
     };
-  
+ 
+
+
     const data = await s3.listObjectsV2(params).promise();
 
 
@@ -117,5 +121,6 @@ module.exports = function(app){
       res.send('File deleted successfully ');
     });
 
-   });
+   });   
+
 }
