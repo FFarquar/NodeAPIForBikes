@@ -1,73 +1,51 @@
 //This is an evolution of test_Aws_Session_Tok.js. Trying to expand the functionality
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const app = express()
-
-const AWS = require('aws-sdk');
+var express = require("express");
+    AWS = require('aws-sdk');
+    bodyParser = require("body-parser");
+    multer = require('multer');
+    multerS3 = require('multer-s3');
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLR232WL4FF',
-  secretAccessKey: 'QtxsQwIvrNIW4cxSnEbHiADXKa6LERarC+8YplB6',
+/* AWS.config.update({
+  accessKeyId: 'ASIAZI4YHMLRTG44CZU5',
+  secretAccessKey: 'AbeL3oQyVMNSAbxhiuVyW7bB3oqW7eUUAEiG3Wde',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEPX//////////wEaCmFwLXNvdXRoLTEiRzBFAiBj3hthz82tMwYRdHB+rmmMdWYr3nPmN9KZs51o243zqQIhAMNKJpBvyu05qD1UDdau9eDAxmCBTyOPsN84FDsJB4LmKrcCCJ7//////////wEQABoMNjM3NTg1MDIzNzE1Igz0hzC0pT1XmEVkc4gqiwJGv0VcK6CxxifB4anlosiNzd2p6H4Db2g3AFiggG08xk/XTfcpWYjQsBHzgoNqJXV9QgJ+hUsPZrFxMdrF5XxCzof5fThmB1wqWyU4AQ6jTX62PTlwaDOOnzNUoIZhua7osRW/16oBKi34+vOhSH4CjgF0Rr1mNUD/jzvB3GQdnsHPeIh0IL2RJJEOcb4t4kuU2A6DTE/Ge0jfC/OhIXme9fgJH5ReASUX+osoXVv/YYzFkSQV1BSlYtKp+an+Da81OW23/92tAUijLYRJxqMnhweObYeeTqXExAac4ntTe/7TUFI1XPukmIQN/YCDDeBa2twwEm31AbAMCBDhE1/4+yj9zBaFbWbTId8whaOYrQY6nQFfWFjp54qkT45xctJeCaDbzg7fv8s1cYe/uDEGAjK6gEWC92st7eTebowzVZ5nJ4I33rK9k3eIXlre4Cub0MZYRXdBMoeJrWsEoS+ZvakVHOH5MiYJQt+k7hEuoL5LKOxc5FLOsfIUSDmTkrwUXZbRQa2YPCNDLXCYU14swka1xzw4fEBxZBiXg+z9ppHdYO7uEUsf8z8CcD0w+SPa'
+  sessionToken: 'IQoJb3JpZ2luX2VjEAgaCmFwLXNvdXRoLTEiRzBFAiBMpnzXKRDN6L1Htm6fymlNIt/OguKZlfST9LdSkveRjgIhAJ2Eil2J23Gel3DLBzfcJMDowLOeNtxj6pa/EioFqJw2KrcCCLH//////////wEQABoMNjM3NTg1MDIzNzE1Igzna8+PzkGYJJtcW3oqiwJt46yEPhF7m0TM1WmSHutzJ6quftY4saTrkrK+4BOtitiL8hQrJrd5CcxL+78m5N1OFcAxss7qfTsNOUqOXlm958I5wX22J7BQfUWkLR3/EkoVHELRUhEBDVu539MKhMny4yc1wPoP9tKtdq6C3ishKFByPxLbY0V1trhaJI5GgG4gGTD/7euC5S5/3S7UyCxUXra+7vDrJnqAByakH2TmW5k/DmjKvsu9kCmjrvGz2cVkwMFhrtyuW61JGyZOOvDmSQz8UVe784WucsA2446nyPla0eC4WKJ3R7R6bntsKP2/FrXgsVKZ9kpVWTks8gAbF+foKKDZmXgvzk8vlnZTXcs/kSOFD0AiTnUwoLWcrQY6nQEQlw2qe1CshkOlQvZmD6edJFyaWTLuKx7zAzw9b/I3vEEpCJYZSzAbs+0i83pIu+z2MAmivLcmz2sEucdgZTPOpdI+ZvG0LK45YaCyZ/VoljyzkMoQyvL/xhbI1wxagREACN1S7H7SGz/ZMCfWyDPbyCpVrR4ONsjjchf5DC4mNy9b1GZzYE75uyRhYpceR9EMsIwJB4HBpnHYJKEa'
+});
+ */
+var app = express()
+    s3 = new AWS.S3();
+
+app.use(bodyParser.json());
+
+var upload = multer({
+  storage: multerS3({
+      s3: s3,
+      bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
+      key: function (req, file, cb) {
+          console.log(file);
+          cb(null, `${req.body.directoryupper}/${req.body.directorylower}/${file.originalname}`); //use Date.now() for unique file keys
+          //cb(null, file.originalname); //use Date.now() for unique file keys
+      }
+  })
 });
 
-const s3 = new AWS.S3();
-
-const multer = require('multer');
-
-//this implementation of multer works without issue, but no control over the file name
-/* 
-const upload = multer(
-  {
-  storage: multer.memoryStorage(),
-  limits: {fileSize: 5 * 1024 * 1024  }, // limit file size to 5MB
-  }
-); */
-
-const storage = multer.memoryStorage({
-  destination: (req, file, callback) => {
-      callback(null, "")
-  }
-})
-const upload = multer({storage}).single("file");
- 
 
 
 module.exports = function(app){
 
   //this example uses multi part with the directory set in the form-data
-  app.post('/api/images/upload', upload, (req, res) => {
-    console.log("In directory post")
-    //let myFile = req.file.originalname
-    //let path = req.body.directoryupper  + "/" + req.body.directorylower  //easier then I thought to access the values set in the form-data key
-    //console.log("Path = " + path)
-    //console.log("Filename = " + myFile)
-    const params = {
-      Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
-      Key: `${req.body.directoryupper}/${req.body.directorylower}/${req.file.originalname}`,
-      Body: req.file.buffer,
-    };
-  
-/*     s3.putObject(params, (error, data) => {
-      if(error) {
-          res.status(500).send(error)        
-      }
+  app.post('/api/images/upload', upload.array('file',10), (req, res) => {
+    console.log(req.file)
 
-      res.status(200).send(data)
-
-    }) */
-    s3.upload(params, (error, data) => {
-      if(error) {
-          res.status(500).send(error)        
-      }
-
-      res.status(200).send(data)
-
-    })
+    res.send({
+      message: "Uploaded!",
+      urls: req.files.map(function(file) {
+          return {url: file.location, name: file.key, type: file.mimetype, size: file.size};
+      })
+    });
 
   });
 
@@ -75,7 +53,7 @@ module.exports = function(app){
     console.log("In getfilesinfolder")
     let upperfolder = req.params.upperfolder
     let lowerfolder = req.params.lowerfolder
-    //console.log("Upper folder " + upperfolder)
+  
     const params = {
       Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
       Prefix: `${upperfolder}/${lowerfolder}`    //The prefix doesent work when going down another level, like 2~3 even with delimter
