@@ -9,12 +9,12 @@ var express = require("express");
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
 /* AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLRTG44CZU5',
-  secretAccessKey: 'AbeL3oQyVMNSAbxhiuVyW7bB3oqW7eUUAEiG3Wde',
+  accessKeyId: 'ASIAZI4YHMLRTTVCXXUC',
+  secretAccessKey: 'YVTq0dcjqfBFpJs8ISZv/+GFYEpVIBFiqW5VoFkf',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEAgaCmFwLXNvdXRoLTEiRzBFAiBMpnzXKRDN6L1Htm6fymlNIt/OguKZlfST9LdSkveRjgIhAJ2Eil2J23Gel3DLBzfcJMDowLOeNtxj6pa/EioFqJw2KrcCCLH//////////wEQABoMNjM3NTg1MDIzNzE1Igzna8+PzkGYJJtcW3oqiwJt46yEPhF7m0TM1WmSHutzJ6quftY4saTrkrK+4BOtitiL8hQrJrd5CcxL+78m5N1OFcAxss7qfTsNOUqOXlm958I5wX22J7BQfUWkLR3/EkoVHELRUhEBDVu539MKhMny4yc1wPoP9tKtdq6C3ishKFByPxLbY0V1trhaJI5GgG4gGTD/7euC5S5/3S7UyCxUXra+7vDrJnqAByakH2TmW5k/DmjKvsu9kCmjrvGz2cVkwMFhrtyuW61JGyZOOvDmSQz8UVe784WucsA2446nyPla0eC4WKJ3R7R6bntsKP2/FrXgsVKZ9kpVWTks8gAbF+foKKDZmXgvzk8vlnZTXcs/kSOFD0AiTnUwoLWcrQY6nQEQlw2qe1CshkOlQvZmD6edJFyaWTLuKx7zAzw9b/I3vEEpCJYZSzAbs+0i83pIu+z2MAmivLcmz2sEucdgZTPOpdI+ZvG0LK45YaCyZ/VoljyzkMoQyvL/xhbI1wxagREACN1S7H7SGz/ZMCfWyDPbyCpVrR4ONsjjchf5DC4mNy9b1GZzYE75uyRhYpceR9EMsIwJB4HBpnHYJKEa'
-});
- */
+  sessionToken: 'IQoJb3JpZ2luX2VjECQaCmFwLXNvdXRoLTEiRjBEAiAGueRJvG/gSfcjDqjS1EQ4iCXEsLOBwBQChkLY/4OtWQIgZXme2S0dSPZvKaQe3lLKM2xx6IwIOnEcLWh7AbWxDZoqtwIIzv//////////ARAAGgw2Mzc1ODUwMjM3MTUiDHL3C75EYJ6Uol2FZiqLAtbTh7obr9jYyGfC0cxNFyC7aZM4G2WcTPuQcSEAmFt8x4XQSOohm8uqL92ohHnW+BqVPouI45akwZuGUVkGO0sLyJ9E3qWqORKPYk7POcYSrPgM2OWZT6rL5gesdq78wQpuysjL2GKn1lZEStn9haYkNJ2gFfqjy4I9Au0gdtOdou0NSi3+wyQRg+tDeLpS8Rn9DqGcGofdM2YRVb4etaaL8U/xqnBPHwR7A56/wBu4F0k8nk/dMo7euLOkzqA3zR+I8UC7KZhCfHXL1Y4d6PwnLbW9hobn36pm6aeGOUpY6Q9Xq/pDRtCs0GRHp/ZRmmXX4UGRxQxPY7nimgF7Vh2jZBjQ0OrPmzaZ/TDwzqKtBjqeAd1ZN0c6unXh5wv0L3kMoC7dHyl0lyU2rj9bZV2DvTIl7RUE7HZuplq8DX+cDXbgcM2Z8BBdD9x7OOn0JMFT2KICNX01p+cya0LrQfz7CcbtPktcKk2h2/7EDJM7NJPo1G5m5iBzLVu00JhvZgxkPh9M4IGq1IkM/eIzb4YvRlA2ZqiKs3AJkCWnhg2427hiICUdrC4kwpgZUimaaDYx'
+}); */
+
 var app = express()
     s3 = new AWS.S3();
 
@@ -59,7 +59,7 @@ module.exports = function(app){
       Prefix: `${upperfolder}/${lowerfolder}`    //The prefix doesent work when going down another level, like 2~3 even with delimter
     };
   
-    console.log("Params " + params.Prefix)
+    //console.log("Params " + params.Prefix)
 
     const data = await s3.listObjectsV2(params).promise();
 
@@ -117,6 +117,7 @@ module.exports = function(app){
 
     };    
 
+    //deleteParam.Key = "Dido.jpg"
     console.log("File to delete = " + deleteParam.Key)
 
     s3.deleteObject(deleteParam, function(err, data) {
