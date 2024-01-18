@@ -11,7 +11,18 @@ const { adminAuth, userAuth} = require("../middleware/auth.js");
 const noteWriteSchema = Schema({
     BikeId: Number,
     Date: String,
-    Note: String
+    Note: String,
+    UploadResult:[
+      {
+        Uploaded:Boolean,
+        FileName :String,
+        StoredFileName : String,
+        ServerPath : String,
+        ErrorCode : Number,
+        MimeType : String,
+        Size : Number
+      }
+    ]    
   });
   const Note_m_Write = mongoose.model("writenotes", noteWriteSchema, "notes");
 
@@ -85,10 +96,12 @@ const noteWriteSchema = Schema({
       //Add a note (auth)
       app.post('/api/notes/addnote', adminAuth, async function(req, res){
         //console.log("date received from API = " + req.body.Date)
+        console.log(req.body)
         const note = new Note_m_Write({
           Note: req.body.Note,
           Date: req.body.Date,
-          BikeId: req.body.BikeId
+          BikeId: req.body.BikeId,
+          UploadResult: req.body.UploadResult
         })
   
         //console.log("date parse when saving = " + trip.Date)

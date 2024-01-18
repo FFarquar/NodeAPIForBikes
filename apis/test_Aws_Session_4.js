@@ -8,12 +8,12 @@ var express = require("express");
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLRTTVCXXUC',
-  secretAccessKey: 'YVTq0dcjqfBFpJs8ISZv/+GFYEpVIBFiqW5VoFkf',
+/* AWS.config.update({
+  accessKeyId: 'ASIAZI4YHMLRX5GHBP7Q',
+  secretAccessKey: 'ylYIcXKiVLuYpv3iKp/0JEk75emC3+msI8aFy2sW',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjECQaCmFwLXNvdXRoLTEiRjBEAiAGueRJvG/gSfcjDqjS1EQ4iCXEsLOBwBQChkLY/4OtWQIgZXme2S0dSPZvKaQe3lLKM2xx6IwIOnEcLWh7AbWxDZoqtwIIzv//////////ARAAGgw2Mzc1ODUwMjM3MTUiDHL3C75EYJ6Uol2FZiqLAtbTh7obr9jYyGfC0cxNFyC7aZM4G2WcTPuQcSEAmFt8x4XQSOohm8uqL92ohHnW+BqVPouI45akwZuGUVkGO0sLyJ9E3qWqORKPYk7POcYSrPgM2OWZT6rL5gesdq78wQpuysjL2GKn1lZEStn9haYkNJ2gFfqjy4I9Au0gdtOdou0NSi3+wyQRg+tDeLpS8Rn9DqGcGofdM2YRVb4etaaL8U/xqnBPHwR7A56/wBu4F0k8nk/dMo7euLOkzqA3zR+I8UC7KZhCfHXL1Y4d6PwnLbW9hobn36pm6aeGOUpY6Q9Xq/pDRtCs0GRHp/ZRmmXX4UGRxQxPY7nimgF7Vh2jZBjQ0OrPmzaZ/TDwzqKtBjqeAd1ZN0c6unXh5wv0L3kMoC7dHyl0lyU2rj9bZV2DvTIl7RUE7HZuplq8DX+cDXbgcM2Z8BBdD9x7OOn0JMFT2KICNX01p+cya0LrQfz7CcbtPktcKk2h2/7EDJM7NJPo1G5m5iBzLVu00JhvZgxkPh9M4IGq1IkM/eIzb4YvRlA2ZqiKs3AJkCWnhg2427hiICUdrC4kwpgZUimaaDYx'
-});
+  sessionToken: 'IQoJb3JpZ2luX2VjECcaCmFwLXNvdXRoLTEiRjBEAiAMl6DploPy8VBzLV6fNCynEdACGinWSv4otcH8pzDD9wIgK4ik+qSugryQW8lJvSPLDO+YKeGu1GAglE4Ekvc8toMqtwII0P//////////ARAAGgw2Mzc1ODUwMjM3MTUiDDJ9WleK5dfVW3AjfyqLApb7stRbZ4uw4lECJpfT8WlZ+g9k40GWse2+WGKX1u4t7xbay1z3hg2gSCjooIBrGf5uUsqX+/zhXbdKtcW3RF9XVK/Kg1VQ9HF9uqiDMkKipr+H9dommgz+CGzbfj7BDROtKOZWVkIpLWrWQjF2YSm/uEEPaKopWdDIWvUNlII9yXd5sE9WysLJnhNfvAoYIvjVGcZ2Xl10cNxiXxqL0npV2gF/h78kdHoK2zAkPCGIzbgJRi3HA6CCNJxZHluNTFXtpocC2ThfbA4lxPBaklJjp3Sdp+x7ntrENJQWvWchULVq2CEOoimbpHE6NFxLDyOGPG1vLSCPSwHFkrj8P04fp61G6tq+KO1SeTCQnKOtBjqeAUUAW3Dec80rzWgQSeuGDejsqhvifSo/UjZGLV5tMF/7XRtYoMyjGEyn9uhJHaQnCD2FT9SIWWdIdbCH+Jm3sf/Z1zZUBqkjO9tijpncGwlBdn8kXhUl6Jul0OBT19YSAH93zKJrA3ONOCWmazF/xi81XGhQsxzCgV+BLjElc8VEOvRktJ7szyJ4yOvLj0LTC1OORUqaMrygcUs+ofvC'
+}); */
 
 var app = express()
     s3 = new AWS.S3();
@@ -25,25 +25,21 @@ var upload = multer({
       s3: s3,
       bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
       key: function (req, file, cb) {
-          console.log(file);
+          //console.log(file);
           cb(null, `${req.body.directoryupper}/${req.body.directorylower}/${file.originalname}`); //use Date.now() for unique file keys
-          //cb(null, file.originalname); //use Date.now() for unique file keys
       }
   })
 });
-
-
 
 module.exports = function(app){
 
   //this example uses multi part with the directory set in the form-data
   app.post('/api/images/upload', upload.array('file',10), (req, res) => {
-    console.log(req.file)
+    //console.log(req.file)
 
     res.send({
-      message: "Uploaded!",
-      urls: req.files.map(function(file) {
-          return {url: file.location, name: file.key, type: file.mimetype, size: file.size};
+      UploadResults: req.files.map(function(file) {
+          return {Uploaded:'true', FileName: file.originalname, StoredFileName: file.location, ServerPath:`${req.body.directoryupper}/${req.body.directorylower}/`, MimeType: file.mimetype, Size: file.size, ErrorCode:0};
       })
     });
 
@@ -56,7 +52,7 @@ module.exports = function(app){
   
     const params = {
       Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
-      Prefix: `${upperfolder}/${lowerfolder}`    //The prefix doesent work when going down another level, like 2~3 even with delimter
+      Prefix: `${upperfolder}/${lowerfolder}`    
     };
   
     //console.log("Params " + params.Prefix)
