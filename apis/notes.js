@@ -14,7 +14,7 @@ const noteWriteSchema = Schema({
     Note: String,
     UploadResult:[
       {
-        Uploaded:Boolean,
+        Uploaded:String, //IF this is a boolean, the converter in the client app cant desiarlize
         FileName :String,
         StoredFileName : String,
         ServerPath : String,
@@ -33,7 +33,7 @@ const noteWriteSchema = Schema({
     Note: String,
     UploadResult:[
       {
-        Uploaded:String,    //IF this is a boolean, the converter in the client app cant desiarlize
+        Uploaded: String,    //IF this is a boolean, the converter in the client app cant desiarlize
         FileName :String,
         StoredFileName : String,
         ServerPath : String,
@@ -100,7 +100,7 @@ const noteWriteSchema = Schema({
             resultsToReturn.push(obj)            
         });  
         resultsToReturn.sort(compAsc);
-        
+
         res.send(resultsToReturn);
       });
 
@@ -115,7 +115,7 @@ const noteWriteSchema = Schema({
           UploadResult: req.body.UploadResult
         })
   
-        //console.log("date parse when saving = " + trip.Date)
+        console.log("Details of note after adding " + note)
         await note.save()
         res.send(note)
   
@@ -149,6 +149,7 @@ const noteWriteSchema = Schema({
         else
         {
             doc.Date = new Date(doc.Date);
+            console.log("response from get a note = " + doc);            
             res.send(doc);
         }
   
