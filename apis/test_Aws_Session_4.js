@@ -8,12 +8,12 @@ var express = require("express");
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-/* AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLRX5GHBP7Q',
-  secretAccessKey: 'ylYIcXKiVLuYpv3iKp/0JEk75emC3+msI8aFy2sW',
+AWS.config.update({
+  accessKeyId: 'ASIAZI4YHMLR2NEM56HX',
+  secretAccessKey: 'V2JiANz1qWsR2BmCQaiD35PURri79NUQJ05HgHdQ',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjECcaCmFwLXNvdXRoLTEiRjBEAiAMl6DploPy8VBzLV6fNCynEdACGinWSv4otcH8pzDD9wIgK4ik+qSugryQW8lJvSPLDO+YKeGu1GAglE4Ekvc8toMqtwII0P//////////ARAAGgw2Mzc1ODUwMjM3MTUiDDJ9WleK5dfVW3AjfyqLApb7stRbZ4uw4lECJpfT8WlZ+g9k40GWse2+WGKX1u4t7xbay1z3hg2gSCjooIBrGf5uUsqX+/zhXbdKtcW3RF9XVK/Kg1VQ9HF9uqiDMkKipr+H9dommgz+CGzbfj7BDROtKOZWVkIpLWrWQjF2YSm/uEEPaKopWdDIWvUNlII9yXd5sE9WysLJnhNfvAoYIvjVGcZ2Xl10cNxiXxqL0npV2gF/h78kdHoK2zAkPCGIzbgJRi3HA6CCNJxZHluNTFXtpocC2ThfbA4lxPBaklJjp3Sdp+x7ntrENJQWvWchULVq2CEOoimbpHE6NFxLDyOGPG1vLSCPSwHFkrj8P04fp61G6tq+KO1SeTCQnKOtBjqeAUUAW3Dec80rzWgQSeuGDejsqhvifSo/UjZGLV5tMF/7XRtYoMyjGEyn9uhJHaQnCD2FT9SIWWdIdbCH+Jm3sf/Z1zZUBqkjO9tijpncGwlBdn8kXhUl6Jul0OBT19YSAH93zKJrA3ONOCWmazF/xi81XGhQsxzCgV+BLjElc8VEOvRktJ7szyJ4yOvLj0LTC1OORUqaMrygcUs+ofvC'
-}); */
+  sessionToken: 'IQoJb3JpZ2luX2VjEDcaCmFwLXNvdXRoLTEiRjBEAiB/CbFmsbbPxrNQi3kaZKz57GM+i7ggg4bYWJLjV5uW1AIgMnmSQhMXf0l0hi6g9AF/yRTeL+11gvTVddvNp/rmxsQqtwII4P//////////ARAAGgw2Mzc1ODUwMjM3MTUiDAjhcS53+jYuqTbrbyqLAh0ZD3gKvVOOSCJiFO0f5TssabCHQUlQ2kAV5N3bZVB6xeu5t9oShoj81kRAUVrvR9NHiR+GZyGpyUDyn6yVrTOuU54yAOn7e7CDB3gLEbi0qgWeTQHZB+HJUWLdZ65jjoi32WPBotLJBlfBXVeWsxW+oYBNq4i2gRxB71mXAzxlM+BucG3LpYAWwJvqCRRnlGP9zpT93kBPL0n+9kwd80hK6olFzM8bWwu//sM4wvMuMZW0CYij0m3E3AvbI0ZF6w3T3twoYkm+vXTtQfacQNnrv7avEp33ZOLWA4Cx6tedEp0j4zNPXFbq5iCe+LKMHkTX/D9meuevuD/kAJD9Cb0eowl4Nz+Vn2O7dzCI2aatBjqeAanfoRfi3wxL8jJODbihMJvVy7Y4aH4VMwEAkXoVEK9JWE+cc02euB0d0GmSujEigVm9CFiPoHU9RKLglcngIFWl1yvK7YC+DV7BcGeDbpSStgeOqKYVGvz7bgHaL+9n1sT79GgrJLOGZ83eg1DngpwaqT5FBs/hj/OnVOpLO4z87SSXKS35+sBrllZNk8cVcoVkaJ+8I5u24meBa9Ih'
+});
 
 var app = express()
     s3 = new AWS.S3();

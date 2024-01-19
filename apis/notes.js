@@ -31,6 +31,17 @@ const noteWriteSchema = Schema({
     BikeId: Number,
     Date: Date,
     Note: String,
+    UploadResult:[
+      {
+        Uploaded:String,    //IF this is a boolean, the converter in the client app cant desiarlize
+        FileName :String,
+        StoredFileName : String,
+        ServerPath : String,
+        ErrorCode : Number,
+        MimeType : String,
+        Size : Number
+      }    
+    ]
   });
 
   const Note_m_Read = mongoose.model("readnotes", noteReadSchema, "notes");
@@ -128,6 +139,7 @@ const noteWriteSchema = Schema({
   
         let doc = await Note_m_Read.findOne(filter);
 
+        console.log("Note details " + doc)
         //TODO: if note not fiound, this is causing an error
         if(doc == null)
         {
