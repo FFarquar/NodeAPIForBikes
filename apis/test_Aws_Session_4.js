@@ -8,13 +8,13 @@ var express = require("express");
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-AWS.config.update({
+/* AWS.config.update({
   accessKeyId: 'ASIAZI4YHMLR2NEM56HX',
   secretAccessKey: 'V2JiANz1qWsR2BmCQaiD35PURri79NUQJ05HgHdQ',
   region: 'ap-southeast-2',
   sessionToken: 'IQoJb3JpZ2luX2VjEDcaCmFwLXNvdXRoLTEiRjBEAiB/CbFmsbbPxrNQi3kaZKz57GM+i7ggg4bYWJLjV5uW1AIgMnmSQhMXf0l0hi6g9AF/yRTeL+11gvTVddvNp/rmxsQqtwII4P//////////ARAAGgw2Mzc1ODUwMjM3MTUiDAjhcS53+jYuqTbrbyqLAh0ZD3gKvVOOSCJiFO0f5TssabCHQUlQ2kAV5N3bZVB6xeu5t9oShoj81kRAUVrvR9NHiR+GZyGpyUDyn6yVrTOuU54yAOn7e7CDB3gLEbi0qgWeTQHZB+HJUWLdZ65jjoi32WPBotLJBlfBXVeWsxW+oYBNq4i2gRxB71mXAzxlM+BucG3LpYAWwJvqCRRnlGP9zpT93kBPL0n+9kwd80hK6olFzM8bWwu//sM4wvMuMZW0CYij0m3E3AvbI0ZF6w3T3twoYkm+vXTtQfacQNnrv7avEp33ZOLWA4Cx6tedEp0j4zNPXFbq5iCe+LKMHkTX/D9meuevuD/kAJD9Cb0eowl4Nz+Vn2O7dzCI2aatBjqeAanfoRfi3wxL8jJODbihMJvVy7Y4aH4VMwEAkXoVEK9JWE+cc02euB0d0GmSujEigVm9CFiPoHU9RKLglcngIFWl1yvK7YC+DV7BcGeDbpSStgeOqKYVGvz7bgHaL+9n1sT79GgrJLOGZ83eg1DngpwaqT5FBs/hj/OnVOpLO4z87SSXKS35+sBrllZNk8cVcoVkaJ+8I5u24meBa9Ih'
 });
-
+ */
 var app = express()
     s3 = new AWS.S3();
 
