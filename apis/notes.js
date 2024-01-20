@@ -93,14 +93,18 @@ const noteWriteSchema = Schema({
         var resultsToReturn = [];
 
         result.forEach(element => {
+//            const obj = {"Id": element.Id, "BikeId":element.BikeId, "Date" : new Date(element.Date),
+            //"Note" : element.Note, "_id" : element._id};
             const obj = {"Id": element.Id, "BikeId":element.BikeId, "Date" : new Date(element.Date),
-            "Note" : element.Note, "_id" : element._id};
+            "Note" : element.Note, "_id" : element._id, "UploadResult" : element.UploadResult}
             
             //console.log(element.Date)
             resultsToReturn.push(obj)            
         });  
+
         resultsToReturn.sort(compAsc);
 
+        
         res.send(resultsToReturn);
       });
 
@@ -193,7 +197,8 @@ const noteWriteSchema = Schema({
 
 
         const filter = {_id: req.body._id};
-        const update = {_id: req.body._id, Date: req.body.Date, Note: req.body.Note, BikeId: req.body.BikeId};
+        //const update = {_id: req.body._id, Date: req.body.Date, Note: req.body.Note, BikeId: req.body.BikeId};
+        const update = {_id: req.body._id, Date: req.body.Date, Note: req.body.Note, BikeId: req.body.BikeId, UploadResult: req.body.UploadResult};
 
         //console.log("Update data = " + update.Stringify());
         let doc = await Note_m_Write.findOneAndUpdate(filter, update);

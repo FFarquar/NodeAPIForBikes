@@ -9,10 +9,10 @@ var express = require("express");
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
 /* AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLR7PCNF2XX',
-  secretAccessKey: 'qwsqkn3f8D7M2a4iDntHibjV8wJBCTA955cZ2Ez2',
+  accessKeyId: 'ASIAZI4YHMLR7VVZJQWF',
+  secretAccessKey: 'w8RXXqq8De7I2ncQ75bw/h3vOFv3FGF4m5jKFOK3',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEDgaCmFwLXNvdXRoLTEiSDBGAiEA+Esd+2joc5T12puJNOXlTEC8CDBtrENuch5L4Ldd9zACIQDOByO7O6BqQkBFuLYnLpoxg3R/IE2DQ/bYxD5em6yrfyq3Agji//////////8BEAAaDDYzNzU4NTAyMzcxNSIMqS9oTBzlZWZdTVQ8KosC5qIyHAQrjxTt4hrpqZkcIDYiSUMD5+uHAYZnME0JpPghSokR2uVA5JNsQnEMbx9+ZLZkVT2Hiit4n3JSlvuvHjiWZTQ2WBQB5vVpWIzAud9FFNRHUoF8AyVhDD5sFmGwo1FtDmgojXn0DlpR5JWrBEo5wF8QC4l+LMWH/6f71kTbyaupo89Oo5pOacUNe2PaNOzYileVh7iAqmTO+N0beF1XcrUfyBxwUcSRtNdos+YqiZRSSzN9ywpp3KSK4yaqIJ0L/wh8wCg13wycN6fG8LrG2u1ebPmq/kFxVSqV07nKmrkHSQTrT9Oj8EPXT1MKYSmLTvuqYFNd27s+qvt3lL5a1sSbNPDGea7IMOKEp60GOpwBOonrCCtzYlOJ6RIMdesrQSfSoslVx4vlfvKzOvji5W8PWW/TtJ1EXl1IuXr03DDRyS1fOqpV7w+OmsPAz8BJzLwQ6uovFfvienXUCRL4bYSy+Cj6viEueXpiHGPSl0o8NKXtnQbmI2QyIGPDgkBzCpgCc3h3L9K6w44KSOHkGITE+7JJNpCK0IHF+GrPWDum2Tw67iri3xNPvG1k'
+  sessionToken: 'IQoJb3JpZ2luX2VjEFQaCmFwLXNvdXRoLTEiRjBEAiAlc5ssoqixyu8lXIH/pYYH/9UUt3pWAT2lqlmd+VAwewIgSwtBOkaTrKgBl9cJuwmc2OGxyimnFBYgaXMIz2aY/DIqtwII/f//////////ARAAGgw2Mzc1ODUwMjM3MTUiDLLw7pSNAnLbjmIHriqLAt31CQtoUSRbI4HKYOMvyTN/7+gdR9mOgwB2GMrGoR2aozJCck7bTaSBGXt8pQyG3zkglZicOTETAsmdCdt4t3jH8Y95MUHPfNhXsb5xlmnWoEhXVAChZvVNxE3EEK2rOzDCg6/rmhb/iEX1p0N9+0z7dCr0bRtXS6ha1iWR6sU3HNWtEaxUXhxffeyslTlGW8ulEHFLh896xjIUONW4FxmJi8qzduLm9rFKDz+Q8Ie5YeLiRtIgE27rZyWOXx7IqLT6YzpfUZJp35xnwVkIBcwv8wss4UXVUfx4wpM2uRQ3EPm/3Dl/D7xzfQOZU/ObLRooLcrAIT5LkMG2Rtcdg1UxLJ0cJJGGPos/BzCuk62tBjqeATQ1Voh94WbCwPfxKQoeUvk+EFAFuhfM2Y3PMzPKYO3w7OajS1G4wzQx6KPaYFyFitHa4bWt4DlRqjBzX0uHG69t60ufhniAIcIO9KD4/5VzFFjVuWIillVVvBHu5ZYez7AYiL6WolqZMC2G95+B0GLBU/+8L7gU7GnO0a90HJKcbT46vwHIVxfo3y3S1LNaIrJMUJXXLpzvA26Iy1u3'
 }); */
 
 var app = express()
