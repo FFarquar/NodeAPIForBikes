@@ -8,12 +8,12 @@ var express = require("express");
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-/* AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLR7VVZJQWF',
-  secretAccessKey: 'w8RXXqq8De7I2ncQ75bw/h3vOFv3FGF4m5jKFOK3',
+AWS.config.update({
+  accessKeyId: 'ASIAZI4YHMLRTV37MMF5',
+  secretAccessKey: 'ABSszAob2P3TlLsaE+nqUfZbn5YbY1uugYnLZ6rH',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEFQaCmFwLXNvdXRoLTEiRjBEAiAlc5ssoqixyu8lXIH/pYYH/9UUt3pWAT2lqlmd+VAwewIgSwtBOkaTrKgBl9cJuwmc2OGxyimnFBYgaXMIz2aY/DIqtwII/f//////////ARAAGgw2Mzc1ODUwMjM3MTUiDLLw7pSNAnLbjmIHriqLAt31CQtoUSRbI4HKYOMvyTN/7+gdR9mOgwB2GMrGoR2aozJCck7bTaSBGXt8pQyG3zkglZicOTETAsmdCdt4t3jH8Y95MUHPfNhXsb5xlmnWoEhXVAChZvVNxE3EEK2rOzDCg6/rmhb/iEX1p0N9+0z7dCr0bRtXS6ha1iWR6sU3HNWtEaxUXhxffeyslTlGW8ulEHFLh896xjIUONW4FxmJi8qzduLm9rFKDz+Q8Ie5YeLiRtIgE27rZyWOXx7IqLT6YzpfUZJp35xnwVkIBcwv8wss4UXVUfx4wpM2uRQ3EPm/3Dl/D7xzfQOZU/ObLRooLcrAIT5LkMG2Rtcdg1UxLJ0cJJGGPos/BzCuk62tBjqeATQ1Voh94WbCwPfxKQoeUvk+EFAFuhfM2Y3PMzPKYO3w7OajS1G4wzQx6KPaYFyFitHa4bWt4DlRqjBzX0uHG69t60ufhniAIcIO9KD4/5VzFFjVuWIillVVvBHu5ZYez7AYiL6WolqZMC2G95+B0GLBU/+8L7gU7GnO0a90HJKcbT46vwHIVxfo3y3S1LNaIrJMUJXXLpzvA26Iy1u3'
-}); */
+  sessionToken: 'IQoJb3JpZ2luX2VjEG0aCmFwLXNvdXRoLTEiRzBFAiEA2w+x/ApTwpLMIOOfnQWDqQKOF+0ngQcuxCzPiEpnkH0CIEH/U2ToPRXhAsva2U/MVtvWrU6UlH5f0Jkm1GzhP3FLKq4CCCYQABoMNjM3NTg1MDIzNzE1Igwq4yDqCa7lePahcY8qiwJJmklfVZZlogJo4QW5Cuiv2coVMM7ymDCbAc9J4XI9oalRZYg31mtyzgyGiYni9UsZXL5unvAdzfAv/V9XF9p863/5Iyrv9D8Rs7nngb9WeF95bulZIRZ1XO1NCovBEroBRFsMENS+JuQ9FH5Gkxf6goaRmm1rOOviwZciOwZ5rD9ASqQxkGu8uQeEoz6h2yvoRKEQKIH9AfTTVOVK5zG6WZYHahg9ut7JUwcwmlefHriYQYHjyTvZHa/I2n9C4fwy5JIicwvpS54CUGxERpG7l8L2QkJrA4UPOyb0nD+NzzuvRLqE/6C4EiNYDAOlPRoZBjZPDRFyCvF26Du4vxjL2G+ZiOoZWTY3DI0wv8eyrQY6nQFqhTJKgi9aO/hTS8jEG2//hhiQrRk0xyaDTfhS9a/93j9jg8fhc7HqS3ZQVmFGyS9jRcqtM34cibsuLghIGCELCCsxyCFwjyN/snWUBMUSBCQ2ETKY1hqcZhkfA8chzcITeNrSdNOll9tD6FLIlR8t+b8mUTsP+W34tHFE3CjiI2N8I4UreeGUZbFj2mwVkWa4jSpgy/5z86JE5l1b'
+});
 
 var app = express()
     s3 = new AWS.S3();
@@ -127,15 +127,18 @@ module.exports = function(app){
       Key: `${req.params.directoryupper}/${req.params.directorylower}/${req.params.filename}`
     };    
 
+    console.log("Params = " + param.Bucket + " " +param.Key)
     s3.getObject(param, function(err, data) {
       if (err) {
         console.error(err);
         return res.status(500).send('Error getting file ' + param.Key + ". " + err.message);
       }
 
+
       res.status(200);
       res.attachment(param.Key); // Set Filename
       res.type(data.ContentType); // Set FileType
+      //console.log("Response = " + data.Body)      
       res.send(data.Body);        // Send File Buffer
     });
 
