@@ -8,12 +8,12 @@ var express = require("express");
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-/* AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLRTV37MMF5',
-  secretAccessKey: 'ABSszAob2P3TlLsaE+nqUfZbn5YbY1uugYnLZ6rH',
+AWS.config.update({
+  accessKeyId: 'ASIAZI4YHMLR62R2EBAL',
+  secretAccessKey: 'nq0q4Omj3CTr8xBVQPGxVZ4E8+uRWggQ/4Xh5awp',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEG0aCmFwLXNvdXRoLTEiRzBFAiEA2w+x/ApTwpLMIOOfnQWDqQKOF+0ngQcuxCzPiEpnkH0CIEH/U2ToPRXhAsva2U/MVtvWrU6UlH5f0Jkm1GzhP3FLKq4CCCYQABoMNjM3NTg1MDIzNzE1Igwq4yDqCa7lePahcY8qiwJJmklfVZZlogJo4QW5Cuiv2coVMM7ymDCbAc9J4XI9oalRZYg31mtyzgyGiYni9UsZXL5unvAdzfAv/V9XF9p863/5Iyrv9D8Rs7nngb9WeF95bulZIRZ1XO1NCovBEroBRFsMENS+JuQ9FH5Gkxf6goaRmm1rOOviwZciOwZ5rD9ASqQxkGu8uQeEoz6h2yvoRKEQKIH9AfTTVOVK5zG6WZYHahg9ut7JUwcwmlefHriYQYHjyTvZHa/I2n9C4fwy5JIicwvpS54CUGxERpG7l8L2QkJrA4UPOyb0nD+NzzuvRLqE/6C4EiNYDAOlPRoZBjZPDRFyCvF26Du4vxjL2G+ZiOoZWTY3DI0wv8eyrQY6nQFqhTJKgi9aO/hTS8jEG2//hhiQrRk0xyaDTfhS9a/93j9jg8fhc7HqS3ZQVmFGyS9jRcqtM34cibsuLghIGCELCCsxyCFwjyN/snWUBMUSBCQ2ETKY1hqcZhkfA8chzcITeNrSdNOll9tD6FLIlR8t+b8mUTsP+W34tHFE3CjiI2N8I4UreeGUZbFj2mwVkWa4jSpgy/5z86JE5l1b'
-}); */
+  sessionToken: 'IQoJb3JpZ2luX2VjEBwaCmFwLXNvdXRoLTEiSDBGAiEA9G/zmHCCZQncI3VI9AC9IjxW/7bbmwtVBk/DwWk7NJgCIQDqFH+oOz2NAfZ9GnXGNcxy9TKvhfSIVy8z4fjfCleYqyq3AgjV//////////8BEAAaDDYzNzU4NTAyMzcxNSIMLuxuYFCT3pfATfNKKosCX4VKCblhuivFk0e1KaSXKEg7mtCU8NmChhqynTd7tUdH8wnBwPYk+c+vWYO4pgdmL9ro0ttECGFKKSav93q/JU2zYQsaGv/afNBfu1KlQp/Ex1eBEAAzVpGtWxUdEBOHf6yF7Zdq+rq5VtItiScBFLxysWVOryz5BZS21XFpb+lCgBL1Dl6TiyMR1lJVpLsmpFt3j2C0plivJa82imbCEAKtxWjF4pgxWGpj/s+kabGxeCa/OEr5BnAXGcYes26eDN52Hqmzvtco3JUqchzH8ttDJwJ2byP0lJb8I7e2qpooZ/V76xSB692kr5jJ+ruC3ytldXFLhW6UPwRwk1FAzYPkVdlr+XFzQ8rjMJ+F2a0GOpwBFe/6qeRz3p29ZMHGgddTJdQpFPHo293VqohSNMDGoQru823gafRdWfzezLDXQRWAkOOCknYCTtjsmMzRhP7l8J6/VCrweaLZCO3OSHcEYHmkCupOdRmUbrgH73heQAguP1QsvYMVC2DQ5ynuvd1kZmI8NeFY9pe3SuO+bN4dLTdrr8WL9QLEYDGma6BZd1TO8/eHDiuNu22f6CEn'
+});
 
 var app = express()
     s3 = new AWS.S3();
@@ -119,29 +119,31 @@ module.exports = function(app){
 
    });   
 
-  app.get('/api/images/getafile/:directoryupper/:directorylower/:filename', async (req, res) => {
-    console.log("In get")      
+    app.get('/api/images/getafile/:directoryupper/:directorylower/:filename', async (req, res) => {
+     console.log("In get")      
     
-    var param = {
-      Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
-      Key: `${req.params.directoryupper}/${req.params.directorylower}/${req.params.filename}`
-    };    
+     var param = {
+       Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
+       Key: `${req.params.directoryupper}/${req.params.directorylower}/${req.params.filename}`
+     };    
 
-    console.log("Params = " + param.Bucket + " " +param.Key)
-    s3.getObject(param, function(err, data) {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Error getting file ' + param.Key + ". " + err.message);
-      }
+     //console.log("Params = " + param.Bucket + " " +param.Key)
+     s3.getObject(param, function(err, data) {
+       if (err) {
+         console.error(err);
+         return res.status(500).send('Error getting file ' + param.Key + ". " + err.message);
+       }
 
 
-      res.status(200);
-      res.attachment(param.Key); // Set Filename
-      res.type(data.ContentType); // Set FileType
-      //console.log("Response = " + data.Body)      
-      res.send(data.Body);        // Send File Buffer
-    });
+       res.status(200);
+       res.attachment(param.Key); // Set Filename
+       res.type(data.ContentType); // Set FileType
+       //console.log("Response = " + data.Body)      
+       res.send(data.Body);        // Send File Buffer
+     });
 
-   });   
+    });     
 
+
+  
 }
