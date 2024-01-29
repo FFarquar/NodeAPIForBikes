@@ -27,10 +27,10 @@ var upload = multer({
       bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
       key: function (req, file, cb) {
           //console.log(file);
-          //console.log("req.body.folders " + req.body.folders)
+          console.log("req.body.folders " + req.body.folders)
           var folderArray =  req.body.folders.split(",")
-          //console.log("Folderarray length = " + folderArray.length)
-          //console.log("Fodler array = " + folderArray)
+          console.log("Folderarray length = " + folderArray.length)
+          console.log("Fodler array = " + folderArray)
           var folderString;
           folderArray.forEach(element => {
             if (folderString != null) {
@@ -41,7 +41,7 @@ var upload = multer({
               folderString = element;  
             }
           }); 
-          //console.log("folderString = " + folderString)
+          console.log("folderString = " + folderString)
 
           //cb(null, `${req.body.directoryupper}/${req.body.directorylower}/${file.originalname}`); //use Date.now() for unique file keys
           cb(null, `${folderString}/${file.originalname}`); //use Date.now() for unique file keys
