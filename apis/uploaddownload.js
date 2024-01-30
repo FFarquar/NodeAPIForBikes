@@ -6,13 +6,24 @@ var express = require("express");
     multer = require('multer');
     multerS3 = require('multer-s3');
 
+const { adminAuth, userAuth} = require("../middleware/auth.js");    
+
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
+if (process.env.NODE_ENV != "production") {
+  AWS.config.update({
+    accessKeyId: 'ASIAZI4YHMLR3W5PRAV2',
+    secretAccessKey: 'mg/gjyKuU61GOaZxoJoWGUTQKBHFOdIMZRxvnat1',
+    region: 'ap-southeast-2',
+    sessionToken: 'IQoJb3JpZ2luX2VjEEwaCmFwLXNvdXRoLTEiSDBGAiEA3H4qpvg0KZJWgUj4QMY9G/JGXq/nnmbBNh9N2umtLBECIQCKHZy9pyPfe7oik85PwBqkeJ1bUqSDbPTh0CdwmNwfySquAggVEAAaDDYzNzU4NTAyMzcxNSIM/xeIpl2K0ystxbGzKosCWZxQAnDVW34ieS6aOD5dPCZC7hLnS/kB5xGE8YU3AUujYkAmyabQIIJuJBzY+ypGVKd3Qvk7GjyZgUwe5NvZiuC8PIW1dB9mlMrmH5Hb2ZHhtD+dTHli0VmHKyy3w7FZjzrSGUIw+MJJyBNI3UHcPhr4pnfC3LxtDsM/wnkxsSx9ZSdjbNKTZF+6BWNhSiFNBqwyq5RsutQ0GJ1pK3RMyEJBv8bss/XgZXDznygXMIKgxGidVyRUvoF6BPernF6vX11oKaOyXND5d2hXm80HLyC2SuxMaevT2M3mECi6q+ZsTMjPAH40/0bXpikk2Hyu6h+TLFMDJOhkuttNNsTE7lTW3VoB5IHVLcbCMMLA460GOpwBa0JOyQtWzyQPfySCfwSzDBhMK3WZHB6ogWly3f5ybJVC79STba8Yd7tK/yivhbG8WNvdAI0PVNZ+olPPcRcKXOAayfd4YMc9kuPgDFoT1vfsWuhhFtqBSIg7kGjeW5Hb4n5qUonyYFd3wickm3r5Tsh4hQudMgUnjidJrZ+30q12oWLBO0I+8u3yKg7JzfzpzomL6i8a4y4tci73'
+  });
+  
+}
 /* AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLR5QF4QHHA',
-  secretAccessKey: 'c+vNjx4/VA/TUSwM2hjYSpyreK7kdNdXCDt9r12q',
+  accessKeyId: 'ASIAZI4YHMLR3W5PRAV2',
+  secretAccessKey: 'mg/gjyKuU61GOaZxoJoWGUTQKBHFOdIMZRxvnat1',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEEEaCmFwLXNvdXRoLTEiSDBGAiEAub5P81YBsmV3NEFm0rPDw+pOVexoVxXVzXtRhbS2JhMCIQDVIGPeogXWrqs41oPBBk/1XTLrJtQDGRVLv7j0iske9yq3Agj6//////////8BEAAaDDYzNzU4NTAyMzcxNSIMTJhYRFgrxEsW4l2LKosCAt+4VjTbgU3fbmcqUdYAoMGOdXCkMXfflWOUvPwtEp/WiD+m++swKDh8U76W6yY4wBK1aXLqU7R4tv33srNYwDpGqLJqYFxQZeFNnvnrlXV7ETwVB6qgjFcfIiAfZf8NIqu/3kOyKLrrzxBPKmC3fOLmU6GHPNPocdH2bQA0Nr+j+H2clnAUo/WnnNumcX7Udg2Cfv4PnSd9rgOg2Vtsw9dMLWo9wvBroBJwaUo4PVzEWX2KVpQPGjDPtuchvX1BnK/TSTvI3u9B5clZmvy0TGjWWXA6Z379t1pFSKaEsyMkySIOdlhYkmjk3CeTeA2bOz3PE3ZKXszp4yzA/nI/fTmAb1RRkiM7iaGrMPCM4a0GOpwBvcKAwM/Bby4Uz4IH1CxQrDULq9ngY/j25OiduQBegjIbdF+WPhtJeK/OdzQ1xI0UxJY/W9TCOs75z2xm9oaqC5mfx+uDvxZrQhyYnBTGFNGdOSR5K+eru6liDZxvUM973sF0vvYpVt1FZL3rVIpOCIzU20X1ZKj3ZLspRSYWW5gv4yrWxSNtyEoImciCTIK9PEEoPG08K9cvWtAZ'
+  sessionToken: 'IQoJb3JpZ2luX2VjEEwaCmFwLXNvdXRoLTEiSDBGAiEA3H4qpvg0KZJWgUj4QMY9G/JGXq/nnmbBNh9N2umtLBECIQCKHZy9pyPfe7oik85PwBqkeJ1bUqSDbPTh0CdwmNwfySquAggVEAAaDDYzNzU4NTAyMzcxNSIM/xeIpl2K0ystxbGzKosCWZxQAnDVW34ieS6aOD5dPCZC7hLnS/kB5xGE8YU3AUujYkAmyabQIIJuJBzY+ypGVKd3Qvk7GjyZgUwe5NvZiuC8PIW1dB9mlMrmH5Hb2ZHhtD+dTHli0VmHKyy3w7FZjzrSGUIw+MJJyBNI3UHcPhr4pnfC3LxtDsM/wnkxsSx9ZSdjbNKTZF+6BWNhSiFNBqwyq5RsutQ0GJ1pK3RMyEJBv8bss/XgZXDznygXMIKgxGidVyRUvoF6BPernF6vX11oKaOyXND5d2hXm80HLyC2SuxMaevT2M3mECi6q+ZsTMjPAH40/0bXpikk2Hyu6h+TLFMDJOhkuttNNsTE7lTW3VoB5IHVLcbCMMLA460GOpwBa0JOyQtWzyQPfySCfwSzDBhMK3WZHB6ogWly3f5ybJVC79STba8Yd7tK/yivhbG8WNvdAI0PVNZ+olPPcRcKXOAayfd4YMc9kuPgDFoT1vfsWuhhFtqBSIg7kGjeW5Hb4n5qUonyYFd3wickm3r5Tsh4hQudMgUnjidJrZ+30q12oWLBO0I+8u3yKg7JzfzpzomL6i8a4y4tci73'
 });
  */
 var app = express()
@@ -24,7 +35,7 @@ var upload = multer({
 
   storage: multerS3({
       s3: s3,
-      bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
+      bucket: process.env.CYCLIC_BUCKET_NAME, //'cyclic-graceful-deer-fedora-ap-southeast-2',
       key: function (req, file, cb) {
           //console.log(file);
           console.log("req.body.folders " + req.body.folders)
@@ -54,7 +65,7 @@ var upload = multer({
 module.exports = function(app){
 
   //this example uses multi part with the directory set in the form-data
-  app.post('/api/images/upload', upload.array('file',10), (req, res) => {
+  app.post('/api/images/upload', adminAuth, upload.array('file',10), (req, res) => {
     console.log("In upload")
   //  console.log("req.body " + req.body.folders)
 
@@ -80,7 +91,7 @@ module.exports = function(app){
  
   });
 
-  app.get('/api/images/getfilesinfolder/:folderscommasep', async (req, res) => {
+  app.get('/api/images/getfilesinfolder/:folderscommasep', adminAuth, async (req, res) => {
     console.log("In getfilesinfolder")
 
     var folderArray =  req.params.folderscommasep.split(",")
@@ -102,7 +113,7 @@ module.exports = function(app){
     //folderString = folderString + "/";
     console.log("FolderString = " + folderString)
     const params = {
-      Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
+      Bucket: process.env.CYCLIC_BUCKET_NAME,//'cyclic-graceful-deer-fedora-ap-southeast-2',
       Prefix: `${folderString}`    
     };
   
@@ -119,17 +130,13 @@ module.exports = function(app){
  
    });
 
-  app.get('/api/images/getlisteverything', async (req, res) => {
+  app.get('/api/images/getlisteverything', adminAuth, async (req, res) => {
     console.log("In get")        
     console.log("")   
     console.log("")   
-/*     const params = {
-      Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
-      Prefix: '2'   //The prefix doesent work when going down another level, like 2~3 even with delimter
-    };
- */
+
     const params = {
-      Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2'
+      Bucket: process.env.CYCLIC_BUCKET_NAME//'cyclic-graceful-deer-fedora-ap-southeast-2'
 
     };
 
@@ -146,7 +153,7 @@ module.exports = function(app){
 
    });
 
-  app.delete('/api/images/delete/:folderscommasep/:filename', async (req, res) => {
+  app.delete('/api/images/delete/:folderscommasep/:filename', adminAuth, async (req, res) => {
     console.log("In delete")      
 
     var folderArray =  req.params.folderscommasep.split(",")
@@ -166,15 +173,12 @@ module.exports = function(app){
       }
     }); 
 
-
-
     var deleteParam = {
-      Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
+      Bucket: process.env.CYCLIC_BUCKET_NAME,//'cyclic-graceful-deer-fedora-ap-southeast-2',
       Key: `${folderString}/${req.params.filename}`
 
     };    
 
-    //deleteParam.Key = "Dido.jpg"
     console.log("File to delete = " + deleteParam.Key)
 
     s3.deleteObject(deleteParam, function(err, data) {
@@ -189,9 +193,9 @@ module.exports = function(app){
 
    });   
 
-    app.get('/api/images/getafile/:folderscommasep/:filename', async (req, res) => {
-     console.log("In getafile")      
-
+    app.get('/api/images/getafile/:folderscommasep/:filename', adminAuth, async (req, res) => {
+     //console.log("In getafile")      
+     //console.log("folderscommasep = " + req.params.folderscommasep)      
      var folderArray =  req.params.folderscommasep.split(",")
      var folderString;
      folderArray.forEach(element => {
@@ -206,8 +210,9 @@ module.exports = function(app){
            
        }
      }); 
+     console.log("Folder string = " + folderString);
      var param = {
-       Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
+       Bucket: process.env.CYCLIC_BUCKET_NAME,//'cyclic-graceful-deer-fedora-ap-southeast-2',
        Key: `${folderString}/${req.params.filename}`
      };    
 
@@ -222,7 +227,6 @@ module.exports = function(app){
        res.status(200);
        res.attachment(param.Key); // Set Filename
        res.type(data.ContentType); // Set FileType
-       //console.log("Response = " + data.Body)      
        res.send(data.Body);        // Send File Buffer
      });
 
