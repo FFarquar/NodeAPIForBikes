@@ -9,12 +9,12 @@ var express = require("express");
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
 /* AWS.config.update({
-  accessKeyId: 'ASIAZI4YHMLRTECQRVUA',
-  secretAccessKey: 'EAhE9IBvIBFlYfam9LHWWe7gNLtYJH74sFYUuFv2',
+  accessKeyId: 'ASIAZI4YHMLR5QF4QHHA',
+  secretAccessKey: 'c+vNjx4/VA/TUSwM2hjYSpyreK7kdNdXCDt9r12q',
   region: 'ap-southeast-2',
-  sessionToken: 'IQoJb3JpZ2luX2VjEDMaCmFwLXNvdXRoLTEiRjBEAiAo3fzBe/ApKtH4H7rjKHPgz1IwD2JXJ08eiYvl/RihIgIgceq7ewYG9koxxe/JhhnLsen8+bpnuGAyBfajrHxw2noqtwII7P//////////ARAAGgw2Mzc1ODUwMjM3MTUiDGZNsfdKwkM9PCTJzyqLAiBRNeZqcvUl5mSnyM5F3Rdb5sw6cpYVJXKlfXZ7zTsOuTQcJMPDs4M2wtL8zd/JM7Mnvo1UFQRpIghzRmSh4cxNTMyP6fZjbU7wPfb2Q8i1mxCPfNU87v+T+W2WYpy08keGryM4wvLfdbe9pdi6n5OElfTPoiEJUGfud8MYphs57/js5vq3hLYafPB9wmX5zXU9RnBy/A+n6C1A6uBswo0DROZDLhnZXuLDatkcmykJBrDU6oRWRGtEKRB1MY4Zn1lrxY+N3tUz8ie8vooceN9YFfCKqA1Joj27X47+duMMs84xiWqi4uGrBLCtsMHJ/w/F4u8cExLs5TZSgdHw95xQ20dtqiT68BG7NTCb/t2tBjqeATBlT2Xn9W1cbXVUL5dYyzxLM2LD1CwLUGqayAeVut2AAC1GV05Mq5d9y/kT0kq2mLs5iSH/0Cvz7UoHS/iOoGg+/15uDwnntTi/CpYAXl6LfLn/D4CqtmvAWSMrIPWGhUxbHEBQSHL7yPMoOic+ghaCKY4PWVvpkiePz++3UKZCYMg1XxmJ/CzWkzuixGFdLEZuBsNnowAYF/qOF4wB'
-}); */
-
+  sessionToken: 'IQoJb3JpZ2luX2VjEEEaCmFwLXNvdXRoLTEiSDBGAiEAub5P81YBsmV3NEFm0rPDw+pOVexoVxXVzXtRhbS2JhMCIQDVIGPeogXWrqs41oPBBk/1XTLrJtQDGRVLv7j0iske9yq3Agj6//////////8BEAAaDDYzNzU4NTAyMzcxNSIMTJhYRFgrxEsW4l2LKosCAt+4VjTbgU3fbmcqUdYAoMGOdXCkMXfflWOUvPwtEp/WiD+m++swKDh8U76W6yY4wBK1aXLqU7R4tv33srNYwDpGqLJqYFxQZeFNnvnrlXV7ETwVB6qgjFcfIiAfZf8NIqu/3kOyKLrrzxBPKmC3fOLmU6GHPNPocdH2bQA0Nr+j+H2clnAUo/WnnNumcX7Udg2Cfv4PnSd9rgOg2Vtsw9dMLWo9wvBroBJwaUo4PVzEWX2KVpQPGjDPtuchvX1BnK/TSTvI3u9B5clZmvy0TGjWWXA6Z379t1pFSKaEsyMkySIOdlhYkmjk3CeTeA2bOz3PE3ZKXszp4yzA/nI/fTmAb1RRkiM7iaGrMPCM4a0GOpwBvcKAwM/Bby4Uz4IH1CxQrDULq9ngY/j25OiduQBegjIbdF+WPhtJeK/OdzQ1xI0UxJY/W9TCOs75z2xm9oaqC5mfx+uDvxZrQhyYnBTGFNGdOSR5K+eru6liDZxvUM973sF0vvYpVt1FZL3rVIpOCIzU20X1ZKj3ZLspRSYWW5gv4yrWxSNtyEoImciCTIK9PEEoPG08K9cvWtAZ'
+});
+ */
 var app = express()
     s3 = new AWS.S3();
 
@@ -33,12 +33,14 @@ var upload = multer({
           console.log("Fodler array = " + folderArray)
           var folderString;
           folderArray.forEach(element => {
-            if (folderString != null) {
-              folderString = folderString + "/" + element;  
-            }
-            else
-            {
-              folderString = element;  
+            if (element != "") {
+              if (folderString != null) {
+                folderString = folderString + "/" + element;  
+              }
+              else
+              {
+                folderString = element;  
+              }
             }
           }); 
           console.log("folderString = " + folderString)
@@ -59,12 +61,14 @@ module.exports = function(app){
     var folderArray =  req.body.folders.split(",")
     var folderString;
     folderArray.forEach(element => {
-      if (folderString != null) {
-        folderString = folderString + "/" + element;  
-      }
-      else
-      {
-        folderString = element;  
+      if (element != "") {
+        if (folderString != null) {
+          folderString = folderString + "/" + element;  
+        }
+        else
+        {
+          folderString = element;  
+        }
       }
     }); 
 
@@ -76,14 +80,30 @@ module.exports = function(app){
  
   });
 
-  app.get('/api/images/getfilesinfolder/:upperfolder/:lowerfolder', async (req, res) => {
+  app.get('/api/images/getfilesinfolder/:folderscommasep', async (req, res) => {
     console.log("In getfilesinfolder")
-    let upperfolder = req.params.upperfolder
-    let lowerfolder = req.params.lowerfolder
-  
+
+    var folderArray =  req.params.folderscommasep.split(",")
+    var folderString;
+
+
+    folderArray.forEach(element => {
+      if (element != "") {
+        if (folderString != null) {
+          folderString = folderString + "/" + element;  
+        }
+        else
+        {
+          folderString = element;  
+        }
+      }
+    }); 
+    
+    //folderString = folderString + "/";
+    console.log("FolderString = " + folderString)
     const params = {
       Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
-      Prefix: `${upperfolder}/${lowerfolder}`    
+      Prefix: `${folderString}`    
     };
   
     //console.log("Params " + params.Prefix)
@@ -126,12 +146,31 @@ module.exports = function(app){
 
    });
 
-  app.delete('/api/images/delete/:directoryupper/:directorylower/:filename', async (req, res) => {
+  app.delete('/api/images/delete/:folderscommasep/:filename', async (req, res) => {
     console.log("In delete")      
-    
+
+    var folderArray =  req.params.folderscommasep.split(",")
+    var folderString;
+    folderArray.forEach(element => {
+      if (element != "") {
+        if (folderString != null) {
+          console.log("Element folder = " + element)      
+          folderString = folderString + "/" + element;  
+        }
+        else
+        {
+          folderString = element;  
+          console.log("First element = " + element)      
+        }
+          
+      }
+    }); 
+
+
+
     var deleteParam = {
       Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
-      Key: `${req.params.directoryupper}/${req.params.directorylower}/${req.params.filename}`
+      Key: `${folderString}/${req.params.filename}`
 
     };    
 
@@ -150,15 +189,29 @@ module.exports = function(app){
 
    });   
 
-    app.get('/api/images/getafile/:directoryupper/:directorylower/:filename', async (req, res) => {
-     console.log("In get")      
-    
+    app.get('/api/images/getafile/:folderscommasep/:filename', async (req, res) => {
+     console.log("In getafile")      
+
+     var folderArray =  req.params.folderscommasep.split(",")
+     var folderString;
+     folderArray.forEach(element => {
+       if (element != "") {
+         if (folderString != null) {
+           folderString = folderString + "/" + element;  
+         }
+         else
+         {
+           folderString = element;  
+         }
+           
+       }
+     }); 
      var param = {
        Bucket: 'cyclic-graceful-deer-fedora-ap-southeast-2',
-       Key: `${req.params.directoryupper}/${req.params.directorylower}/${req.params.filename}`
+       Key: `${folderString}/${req.params.filename}`
      };    
 
-     //console.log("Params = " + param.Bucket + " " +param.Key)
+
      s3.getObject(param, function(err, data) {
        if (err) {
          console.error(err);
