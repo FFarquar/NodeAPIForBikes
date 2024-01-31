@@ -40,13 +40,10 @@ require('./apis/bikes.js')(app);
 
 require('./apis/chains.js')(app);
 require('./apis/notes.js')(app);
-//require('./apis/testupload.js')(app);
-//require('./apis/savetojws.js')(app);
-//require('./apis/testusingcycl.shs3fs.js')(app);
-//require('./apis/test_Aws_Session_Tok.js')(app); //this module works, refied by next version
-//require('./apis/test_Aws_Session_3.js')(app); //Module works fine. _4 is a iterative change to this
-//require('./apis/test_Aws_Session_4.js')(app);
+require('./apis/parts.js')(app);
+
 require('./apis/uploaddownload.js')(app);
+
 
 
 
