@@ -10,7 +10,8 @@ const { adminAuth, userAuth} = require("../middleware/auth.js");
 
 //The AWS details came from the Data tab on the Cyclic website. In prod, these are taken from the server, no need to change anything.
 //It seems this has to be removed prior to going to prod.
-if (process.env.NODE_ENV != "production") {
+
+if (process.env.NODE_ENV == "development") {
   AWS.config.update({
     accessKeyId: 'ASIAZI4YHMLR3W5PRAV2',
     secretAccessKey: 'mg/gjyKuU61GOaZxoJoWGUTQKBHFOdIMZRxvnat1',
