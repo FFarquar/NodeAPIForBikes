@@ -42,7 +42,7 @@ require('./apis/chains.js')(app);
 require('./apis/notes.js')(app);
 require('./apis/parts.js')(app);
 
-require('./apis/uploaddownload.js')(app);
+require('./OldFilesNotForPublishing/uploaddownload.js')(app);
 
 
 
