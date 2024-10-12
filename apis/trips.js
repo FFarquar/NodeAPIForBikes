@@ -169,7 +169,7 @@ module.exports = function(app){
     }
       //Add a trip
     app.post('/api/trips/addtrip', adminAuth, async function(req, res){
-      //console.log("date received from API = " + req.body.Date)
+      
       const trip = new Trip_m({
         ChainId: req.body.ChainId,
         Date: req.body.Date,
@@ -178,9 +178,11 @@ module.exports = function(app){
         TripDescription: req.body.TripDescription,
         TripNotes: req.body.TripNotes        
       })
-
-      console.log("date parse when saving = " + trip.Date)
+      console.log("Trip object to be written to DB = " + trip)
+//      console.log("date parse when saving = " + trip.Date)
       await trip.save()
+
+
       res.send(trip)
 
 

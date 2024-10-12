@@ -13,10 +13,10 @@ const { adminAuth, userAuth} = require("../middleware/auth.js");
 
 if (process.env.NODE_ENV == "development") {
   AWS.config.update({
-    accessKeyId: 'ASIAZI4YHMLR3W5PRAV2',
-    secretAccessKey: 'mg/gjyKuU61GOaZxoJoWGUTQKBHFOdIMZRxvnat1',
+    accessKeyId: 'ASIAZI4YHMLRUSUCJOFD',
+    secretAccessKey: 'PzFJepBdidbV8JKilVqczwRkQo2aD9P3WcnPb/18',
     region: 'ap-southeast-2',
-    sessionToken: 'IQoJb3JpZ2luX2VjEEwaCmFwLXNvdXRoLTEiSDBGAiEA3H4qpvg0KZJWgUj4QMY9G/JGXq/nnmbBNh9N2umtLBECIQCKHZy9pyPfe7oik85PwBqkeJ1bUqSDbPTh0CdwmNwfySquAggVEAAaDDYzNzU4NTAyMzcxNSIM/xeIpl2K0ystxbGzKosCWZxQAnDVW34ieS6aOD5dPCZC7hLnS/kB5xGE8YU3AUujYkAmyabQIIJuJBzY+ypGVKd3Qvk7GjyZgUwe5NvZiuC8PIW1dB9mlMrmH5Hb2ZHhtD+dTHli0VmHKyy3w7FZjzrSGUIw+MJJyBNI3UHcPhr4pnfC3LxtDsM/wnkxsSx9ZSdjbNKTZF+6BWNhSiFNBqwyq5RsutQ0GJ1pK3RMyEJBv8bss/XgZXDznygXMIKgxGidVyRUvoF6BPernF6vX11oKaOyXND5d2hXm80HLyC2SuxMaevT2M3mECi6q+ZsTMjPAH40/0bXpikk2Hyu6h+TLFMDJOhkuttNNsTE7lTW3VoB5IHVLcbCMMLA460GOpwBa0JOyQtWzyQPfySCfwSzDBhMK3WZHB6ogWly3f5ybJVC79STba8Yd7tK/yivhbG8WNvdAI0PVNZ+olPPcRcKXOAayfd4YMc9kuPgDFoT1vfsWuhhFtqBSIg7kGjeW5Hb4n5qUonyYFd3wickm3r5Tsh4hQudMgUnjidJrZ+30q12oWLBO0I+8u3yKg7JzfzpzomL6i8a4y4tci73'
+    sessionToken: 'IQoJb3JpZ2luX2VjEIf//////////wEaCmFwLXNvdXRoLTEiRzBFAiEAoMQuzvyqgdiPs6Cc3L74+iVjpJeLN4MgmRO7/hVfRh0CIEm06+aUSjZ20ZO70Edn6BoaDYtl+KRAZ0TYNAtSxlcpKq4CCFAQABoMNjM3NTg1MDIzNzE1Igyn4LK/LlNfgm05KewqiwK3z3tZ+7iJENSVObHPNLNRTtYJS6TE1WzKMnsD446MNQmsyJN0itivx7psxaM4JTnusIXYAXKKwVHsVxkWpG10Zc2M30lfoIczZFAXNywJRkxAYz0GA8KjnAq2HaJ30YdfvkD1oGQyl3DKzokIPB9mmGvvsHiytQid+cXsd51bDtZTnyltbRvtQq9c4vQw+3f1cB+15NHdjSr9n+qBoNsoq16gHLa6bC2MvqynGD9TnKHsxC2g7qqqReGmxETKmw/i45OZ/eArf2NcZHYgusB7Zp6oQRo0nn/g+Fx9tZxoRNtYJdYUKfhL+IplfgZdtFlRRb/mK92XTxDgx4AVaBgNfcbbu0XvYuO9YVgwo83wrQY6nQFQZrbGhgaP9Hp2Jn2kiU8Pbf+H/ZwaU8SNIg1TiojzE6fA4zAkXHeIJK2zEbRhLc1tylMwugwFEW/7dMfDO4qayBufIJh8dPP3gucDkZ85PXD4BgD+t0Novy3an76f/0NqOaUj9sRpqLXcVKZKyqXA72QfPu4yA2CfuiM6Lwo0tfv02p9Ux+KeEuplOX3V8SJ7U39PZ9/3rgs+CtLZ'
   });
   
 }
