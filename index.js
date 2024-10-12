@@ -16,10 +16,11 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-  var corsOptions = {
-    origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io'],
-    credentials: true };
-  
+var corsOptions = {
+  origin: ['https://www.google.com', "https://localhost:7171", 'https://ffarquar.github.io'],
+  credentials: true
+};
+
 app.use(cors(corsOptions));
 
 app.get("/api/admin", adminAuth, (req, res) => res.send("Admin Route reache with admin user"));
@@ -28,7 +29,7 @@ app.get("/api/basic", userAuth, (req, res) => res.send("User Route"));
 app.use(express.json());
 
 app.use("/api/auth", require("./Auth/Route"))
-app.use( cookieParser());
+app.use(cookieParser());
 
 require('dotenv').config();
 
@@ -42,14 +43,14 @@ require('./apis/chains.js')(app);
 require('./apis/notes.js')(app);
 require('./apis/parts.js')(app);
 
-require('./OldFilesNotForPublishing/uploaddownload.js')(app);
+//require('./OldFilesNotForPublishing/uploaddownload.js')(app);
 
 
 
 
 //app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 console.log("TODO: up to creating Rego form. To be done from Blazor. https://www.loginradius.com/blog/engineering/guest-post/nodejs-authentication-guide/")
 app.use(express.static("public"));
@@ -59,7 +60,7 @@ const db = async () => {
   try {
 
 
-    const dbstring = "mongodb+srv://"+ process.env.MongoDB_User + ":" + process.env.MongoDB_Password +"@" + process.env.MongoDB_Cluster +"/"+ process.env.MongoDB_DB_Name;
+    const dbstring = "mongodb+srv://" + process.env.MongoDB_User + ":" + process.env.MongoDB_Password + "@" + process.env.MongoDB_Cluster + "/" + process.env.MongoDB_DB_Name;
 
     const conn = await mongoose.connect(dbstring);
 
@@ -68,17 +69,17 @@ const db = async () => {
     module.exports = conn;
 
     console.log("MonoDB Connected: " + await conn.connection.host);
-      
-    } catch (error) {
+
+  } catch (error) {
     console.log(error);
     process.exit(1);
   }
-  
+
 }
 
 
 db().then(() => {
-  app.listen(PORT, ()=> {
+  app.listen(PORT, () => {
     console.log("Listening for requests");
   })
 });
