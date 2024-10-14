@@ -1,0 +1,62 @@
+//this is very similar to the code that gets chain details. It doesnt need to compile a list of trips
+//just count the total distance travelled
+//I moved the chain model/schema out to a separate module so that the chain API could access it as well
+
+const express = require('express');
+const Chain_M = require("../model/Chain")
+const app = express();
+
+
+
+module.exports = {
+    getkmTravelledByBike: async function (bikeID) {
+        // console.log("In getkmTravelled .bikeID = " + bikeID);
+
+        const result = await Chain_M.aggregate([
+            {
+                $match: { BikeId: parseInt(bikeID) },
+            },
+            {
+                $sort: { ChainLetter: 1 }
+            },
+            {
+                $lookup: {
+                    from: "trips",
+                    localField: "Id",
+                    foreignField: "ChainId",
+                    as: "TripDetails"
+                }
+            }
+        ]);
+
+        // console.log(result);
+        var distanceTravelled = 0
+        if (result.length > 0 && result[0].TripDetails.length > 0) {
+            var resultsToReturn = [];
+            result.forEach(element => {
+                if (element.TripDetails.length != 0) {
+
+                    for (let index = 0; index < element.TripDetails.length; index++) {
+                        distanceTravelled = distanceTravelled + element.TripDetails[index].TripDistance;
+                        // console.log(distanceTravelled);
+                    }
+
+                }
+                else {
+                    //chain may have had no trips on it yet
+                    distanceTravelled = distanceTravelled + 0;
+
+                }
+
+            });
+
+        }
+
+
+        distanceTravelled = parseFloat(distanceTravelled).toFixed(2);
+        // console.log("Returning value " + distanceTravelled);
+        return distanceTravelled;
+    },
+
+
+}

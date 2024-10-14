@@ -1,8 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const Schema = mongoose.Schema;
+
 const app = express();
 const { adminAuth, userAuth } = require("../middleware/auth.js");
+const getGlobalStuff = require("../functions/global")
 
 const bikesSchema = new Schema({
   Id: Number,
@@ -14,7 +17,8 @@ const bikesSchema = new Schema({
   Notes: String,
   PurchasedFrom: String,
   WarrantyPeriodYears: Number,
-  Year: Number
+  Year: Number,
+  KMTravelled: Number
 });
 
 
@@ -27,7 +31,22 @@ module.exports = function (app) {
     const filter = {};
     const bikes = await Bike_m.find(filter);
     console.log("In /bikes");
-    console.log("bikes details =  " + bikes);
+    //get the number of km's travelled for each bike
+    if (bikes.length > 0) {
+      console.log("Bikes length " + bikes.length)
+      for (let index = 0; index < bikes.length; index++) {
+        const element = bikes[index].Id;
+        console.log("Element ID " + element)
+        if (element != null) {
+
+          bikes[index].KMTravelled = await getGlobalStuff.getkmTravelledByBike(element);
+        }
+
+      }
+    }
+
+    //console.log("bikes details =  " + bikes);
+
     res.send(bikes);
   });
 
@@ -43,12 +62,13 @@ module.exports = function (app) {
 
     //const bike = await Bike_m.find({Id:bikeID});
     const bike = await Bike_m.findOne({ Id: bikeID }, { _id: 0 });
-    //console.log("bike details =  " + bike);
+    bike.KMTravelled = await getGlobalStuff.getkmTravelledByBike(bikeID);
+
+    //bike.KMTravelled =222
     res.send(bike);
     //res.send(JSON.stringify(bike));
-
-
   });
+
 
   app.post('/api/bikes/addbike', adminAuth, async function (req, res) {
     console.log(req.body)
