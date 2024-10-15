@@ -42,6 +42,8 @@ require('./apis/bikes.js')(app);
 require('./apis/chains.js')(app);
 require('./apis/notes.js')(app);
 require('./apis/parts.js')(app);
+require('./apis/updownAWS3.js')(app);
+
 
 //require('./OldFilesNotForPublishing/uploaddownload.js')(app);
 
