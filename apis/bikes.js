@@ -18,7 +18,9 @@ const bikesSchema = new Schema({
   PurchasedFrom: String,
   WarrantyPeriodYears: Number,
   Year: Number,
-  KMTravelled: Number
+  KMTravelled: Number,
+  ViewOrder: Number,
+  StillOwned: Boolean
 });
 
 
@@ -29,7 +31,7 @@ module.exports = function (app) {
   //An api call to get all bikes
   app.get('/api/bikes', userAuth, async function (req, res) {
     const filter = {};
-    const bikes = await Bike_m.find(filter);
+    const bikes = await Bike_m.find(filter).sort({ViewOrder: 1});
     console.log("In /bikes");
     //get the number of km's travelled for each bike
     if (bikes.length > 0) {
